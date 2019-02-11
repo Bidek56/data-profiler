@@ -17,21 +17,16 @@ class Uploads extends Component {
 
   handleProcess = async postId => {
     this.setState({
-      uploads:
-        this.state.uploads.map(item => {
-          return { ...item, "profile": null }
-        })
+      uploads: this.state.uploads.map(item => ({ ...item, profile: null }))
     })
 
-    const file =
-      this.state.uploads.filter(item => {
-        return (postId === item.id);
-      })
+    const file = this.state.uploads.filter(item => postId === item.id)
 
     if (!file || file.length > 1)
-      console.error("Path for: " + postId + " not found")
+      // console.error('Path for: ' + postId + ' not found')
+      return
 
-    const path = file[0].path
+    const [{ path }] = file
 
     let result = await axios({
       url: 'http://localhost:3001/graphql',
@@ -49,13 +44,11 @@ class Uploads extends Component {
     })
 
     this.setState({
-      uploads:
-        this.state.uploads.map((item) => {
-          if (postId === item.id)
-            return { ...item, "profile": result.data.data.profile }
-          else
-            return item
-        })
+      uploads: this.state.uploads.map(item => {
+        if (postId === item.id)
+          return { ...item, profile: result.data.data.profile }
+        else return item
+      })
     })
   }
 
@@ -74,8 +67,7 @@ class Uploads extends Component {
   render() {
     // console.log("Uploads2:", this.state.uploads);
 
-    if (!this.state)
-      return (<div>"State is null"</div>)
+    if (!this.state) return <div>State is null</div>
 
     return (
       <div>
@@ -88,26 +80,25 @@ class Uploads extends Component {
               <Head>Path</Head>
             </tr>
           }
-          tbody={
-            this.state.uploads.map(({ id, filename, mimetype, path }) => (
-              <tr key={id} >
-                <td><button onClick={(e) => this.handleProcess(id)}>Process</button></td>
-                <Cell>{filename}</Cell>
-                <Cell>{mimetype}</Cell>
-                <Cell>{path}</Cell>
-              </tr>))
-          }
+          tbody={this.state.uploads.map(({ id, filename, mimetype, path }) => (
+            <tr key={id}>
+              <td>
+                <button onClick={e => this.handleProcess(id)}>Process</button>
+              </td>
+              <Cell>{filename}</Cell>
+              <Cell>{mimetype}</Cell>
+              <Cell>{path}</Cell>
+            </tr>
+          ))}
         />
         <div>
-          {
-            this.state.uploads.length > 0 ? (
-              this.state.uploads.map(item => {
-                if (item.profile)
-                  // return item.profile[0].path + ":" + item.profile[0].rowCount;
-                  return <Profile key={item.id} item={item} />
-              }
-              )) : 'No profiles to show'
-          }
+          {this.state.uploads.length > 0
+            ? this.state.uploads.map(item => {
+              if (item.profile)
+                // return item.profile[0].path + ":" + item.profile[0].rowCount;
+                return <Profile key={item.id} item={item} />
+            })
+            : 'No profiles to show'}
         </div>
       </div>
     )

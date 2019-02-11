@@ -50,8 +50,14 @@
     "lint": "eslint --ext js --ext jsx pages components || exit 0"
   },
   "eslintConfig": {
+    "settings": {
+      "react": {
+        "version": "16.8.1"
+      }
+    },
     "extends": [
-      "env"
+      "env",
+      "eslint:recommended"
     ],
     "rules": {
       "require-jsdoc": "off",

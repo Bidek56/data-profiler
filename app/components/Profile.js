@@ -14,11 +14,10 @@ if (process.browser) {
 }
 
 class Profile extends Component {
-
   constructor(props) {
     super(props)
 
-    console.log('Chart data:', props.item)
+    // console.log('Chart data:', props.item)
     this.state = { item: props.item }
   }
 
@@ -60,15 +59,11 @@ class Profile extends Component {
   }
 
   componentWillUnmount() {
-    if (this.chart) {
-      this.chart.dispose()
-    }
+    if (this.chart) this.chart.dispose()
   }
 
   render() {
-    return (
-      <div id='chartdiv' style={{ width: '100%', height: '500px' }}></div>
-    );
+    return <div id="chartdiv" style={{ width: '100%', height: '500px' }} />
   }
 }
 
