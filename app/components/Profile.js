@@ -1,40 +1,75 @@
-import { graphql } from 'react-apollo'
-import profileQuery from '../queries/profile'
-import { Table, Head, Cell } from './Table'
 import { Component } from 'react'
+// import * as am4core from "@amcharts/amcharts4/core"
+// import * as am4charts from "@amcharts/amcharts4/charts"
+// import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+
+let am4core = null
+let am4charts = null
+let am4themesAnimated = null
+if (process.browser) {
+  am4core = require('@amcharts/amcharts4/core')
+  am4charts = require('@amcharts/amcharts4/charts')
+  am4themesAnimated = require('@amcharts/amcharts4/themes/animated')
+  am4core.useTheme(am4themesAnimated.default)
+}
 
 class Profile extends Component {
 
-  // constructor({ data: { uploads = [] } }) {
-
   constructor(props) {
     super(props)
-    console.log("Data:", props.data.profile);
-    this.profile = props.data.profile;
+
+    console.log('Chart data:', props.item)
+    this.state = { item: props.item }
   }
 
-  handleClick = (x, filename) => {
-    console.log(filename);
+  componentDidMount() {
+    let chart = am4core.create('chartdiv', am4charts.XYChart)
+
+    // ... chart code goes here ...
+
+    chart.paddingRight = 20
+
+    let data = []
+    let visits = 10
+    for (let i = 1; i < 366; i++) {
+      visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10)
+      data.push({ date: new Date(2018, 0, i), name: 'name' + i, value: visits })
+    }
+
+    chart.data = data
+
+    let dateAxis = chart.xAxes.push(new am4charts.DateAxis())
+    dateAxis.renderer.grid.template.location = 0
+
+    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
+    valueAxis.tooltip.disabled = true
+    valueAxis.renderer.minWidth = 35
+
+    let series = chart.series.push(new am4charts.LineSeries())
+    series.dataFields.dateX = 'date'
+    series.dataFields.valueY = 'value'
+
+    series.tooltipText = '{valueY.value}'
+    chart.cursor = new am4charts.XYCursor()
+
+    let scrollbarX = new am4charts.XYChartScrollbar()
+    scrollbarX.series.push(series)
+    chart.scrollbarX = scrollbarX
+
+    this.chart = chart
+  }
+
+  componentWillUnmount() {
+    if (this.chart) {
+      this.chart.dispose()
+    }
   }
 
   render() {
     return (
-      <Table
-        thead={
-          <tr>
-            <Head>Filename</Head>
-            <Head>Rows</Head>
-          </tr>
-        }
-        tbody={this.profile.map(({ path, rowCount }) => (
-          <tr key={path} >
-            <Cell>{path}</Cell>
-            <Cell>{rowCount}</Cell>
-          </tr>
-        ))}
-      />
-    )
+      <div id='chartdiv' style={{ width: '100%', height: '500px' }}></div>
+    );
   }
 }
 
-export default graphql(profileQuery)(Profile)
+export default Profile

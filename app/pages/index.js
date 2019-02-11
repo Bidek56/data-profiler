@@ -5,7 +5,7 @@ import UploadFileList from '../components/UploadFileList'
 import Uploads from '../components/Uploads'
 
 const IndexPage = () => (
-  <Page title="Apollo upload examples">
+  <Page title="Data Profiler">
     <Section heading="Upload FileList">
       <UploadFileList />
     </Section>
