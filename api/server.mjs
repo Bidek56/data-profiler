@@ -13,8 +13,8 @@ const server = new apolloServerKoa.ApolloServer({
     // graphql-upload:
     // https://github.com/jaydenseric/graphql-upload#type-uploadoptions
     maxFileSize: 10000000, // 10 MB
-    maxFiles: 20
-  }
+    maxFiles: 20,
+  },
 })
 
 server.applyMiddleware({ app })
@@ -23,7 +23,5 @@ app.listen(process.env.PORT, error => {
   if (error) throw error
 
   // eslint-disable-next-line no-console
-  console.info(
-    `Serving http://localhost:${process.env.PORT} for ${process.env.NODE_ENV}.`
-  )
+  console.info(`Serving http://localhost:${process.env.PORT} for ${process.env.NODE_ENV}.`)
 })

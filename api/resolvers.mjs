@@ -1,11 +1,10 @@
 import fs from 'fs'
+import Excel from 'exceljs'
 import lowdb from 'lowdb'
 import FileSync from 'lowdb/adapters/FileSync'
 import mkdirp from 'mkdirp'
 import promisesAll from 'promises-all'
 import shortid from 'shortid'
-import Excel from 'exceljs'
-
 
 const UPLOAD_DIR = './uploads'
 const db = lowdb(new FileSync('db.json'))
@@ -29,7 +28,7 @@ const storeFS = ({ stream, filename }) => {
       })
       .pipe(fs.createWriteStream(path))
       .on('error', error => reject(error))
-      .on('finish', () => resolve({ id, path }))
+      .on('finish', () => resolve({ id, path })),
   )
 }
 
@@ -51,58 +50,56 @@ async function processProfile(obj) {
   const { file } = obj
 
   // read from a file
-  var workbook = new Excel.Workbook();
+  var workbook = new Excel.Workbook()
 
   if (!workbook) {
-    console.error("Workbook undefined");
-    return null;
+    console.error('Workbook undefined')
+    return null
   }
 
-  await workbook.xlsx.readFile(file);
+  await workbook.xlsx.readFile(file)
 
   // fetch sheet by id
-  let worksheet = workbook.getWorksheet(2);
+  let worksheet = workbook.getWorksheet(2)
 
   // console.log(worksheet);
   if (!worksheet) {
-    console.error("Worksheet undefined");
-    return null;
+    console.error('Worksheet undefined')
+    return null
   }
 
-  let rowCount = 0;
+  let rowCount = 0
 
   // Iterate over all rows (including empty rows) in a worksheet
-  worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
+  worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
     // console.log('Row ' + rowNumber + ' = ' + JSON.stringify(row.values));
-    rowCount++;
-  });
+    rowCount++
+  })
 
-  const rows = [{ file, rowCount }];
-  const iterator = rows[Symbol.iterator]();
+  const rows = [{ file, rowCount }]
+  const iterator = rows[Symbol.iterator]()
 
   // console.log("Rows in worksheet:", iterator);
-  return iterator;
+  return iterator
 }
 
 export default {
   Query: {
     uploads: () => db.get('uploads').value(),
-    profile: (obj, file) => processProfile(file)
+    profile: (obj, file) => processProfile(file),
   },
   Mutation: {
     singleUpload: (obj, { file }) => processUpload(file),
     async multipleUpload(obj, { files }) {
-      const { resolve, reject } = await promisesAll.all(
-        files.map(processUpload)
-      )
+      const { resolve, reject } = await promisesAll.all(files.map(processUpload))
 
       if (reject.length)
         reject.forEach(({ name, message }) =>
           // eslint-disable-next-line no-console
-          console.error(`${name}: ${message}`)
+          console.error(`${name}: ${message}`),
         )
 
       return resolve
-    }
-  }
+    },
+  },
 }
