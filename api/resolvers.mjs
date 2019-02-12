@@ -1,6 +1,4 @@
 import fs from 'fs'
-// const apolloServerKoa = require('apollo-server-koa')
-import apolloServerKoa from 'apollo-server-koa'
 import lowdb from 'lowdb'
 import FileSync from 'lowdb/adapters/FileSync'
 import mkdirp from 'mkdirp'
@@ -87,7 +85,6 @@ async function processProfile(obj) {
 }
 
 export default {
-  Upload: apolloServerKoa.GraphQLUpload,
   Query: {
     uploads: () => db.get('uploads').value(),
     profile: (obj, file) => processProfile(file)

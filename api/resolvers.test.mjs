@@ -1,7 +1,6 @@
 import "@babel/polyfill"
-const apolloServerKoa = require('apollo-server-koa')
-const { createTestClient } = require('apollo-server-testing');
-const gql = require('graphql-tag');
+import { ApolloServer, gql } from 'apollo-server-koa'
+import { createTestClient } from 'apollo-server-testing'
 
 import resolvers from './resolvers'
 import typeDefs from './types'
@@ -18,7 +17,7 @@ test("profile one file", async () => {
 
     // create a test server to test against, using our production typeDefs,
     // resolvers, and dataSources.
-    const server = new apolloServerKoa.ApolloServer({
+    const server = new ApolloServer({
         typeDefs,
         resolvers,
     })
