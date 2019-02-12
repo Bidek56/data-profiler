@@ -11,15 +11,14 @@
     "node": ">=8.6"
   },
   "dependencies": {
+    "alasql": "^0.4.11",
     "apollo-server-koa": "^2.4.0",
     "dotenv": "^6.2.0",
-    "exceljs": "^1.7.0",
     "graphql": "^14.1.1",
     "koa": "^2.7.0",
     "lowdb": "^1.0.0",
     "mkdirp": "^0.5.1",
     "promises-all": "^1.0.0",
-    "quick-pivot": "^2.6.0",
     "shortid": "^2.2.14"
   },
   "devDependencies": {

@@ -7,7 +7,9 @@ import typeDefs from './types'
 const GET_PROFILE = gql`
   query profile($file: String!) {
     profile(file: $file) {
-      file
+      att1
+      att2
+      val
     }
   }
 `
@@ -17,7 +19,7 @@ test('profile one file', async () => {
   // resolvers, and dataSources.
   const server = new ApolloServer({
     typeDefs,
-    resolvers,
+    resolvers
   })
 
   // use the test server to create a query function
@@ -28,14 +30,14 @@ test('profile one file', async () => {
   // run query against the server and snapshot the output
   const res = await query({
     query: GET_PROFILE,
-    variables: { file: test_file },
+    variables: { file: test_file }
   })
 
   expect(res.data).not.toBeUndefined()
   expect(res.data.profile).not.toBeUndefined()
-  expect(res.data.profile[0].file).not.toBeUndefined()
+  // console.log(res.data.profile)
+  expect(res.data.profile.length).toEqual(5)
 
-  const [{ file }] = res.data.profile
-
-  expect(file).toEqual(test_file)
+  // const [{ file }] = res.data.profile
+  // expect(file).toEqual(test_file)
 })

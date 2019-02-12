@@ -7,9 +7,9 @@ export default /* GraphQL */ `
   }
 
   type Profile {
-    id: ID!
-    file: String!
-    rowCount: Int
+    att1: String
+    att2: String
+    val: Float
   }
 
   input FileInput {
