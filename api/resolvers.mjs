@@ -1,4 +1,5 @@
 import fs from 'fs'
+// const apolloServerKoa = require('apollo-server-koa')
 import apolloServerKoa from 'apollo-server-koa'
 import lowdb from 'lowdb'
 import FileSync from 'lowdb/adapters/FileSync'
@@ -6,6 +7,7 @@ import mkdirp from 'mkdirp'
 import promisesAll from 'promises-all'
 import shortid from 'shortid'
 import Excel from 'exceljs'
+
 
 const UPLOAD_DIR = './uploads'
 const db = lowdb(new FileSync('db.json'))
@@ -47,8 +49,8 @@ const processUpload = async upload => {
   return storeDB({ id, filename, mimetype, path })
 }
 
-async function processProfile(file) {
-  const { file: { path } } = file
+async function processProfile(obj) {
+  const { file } = obj
 
   // read from a file
   var workbook = new Excel.Workbook();
@@ -58,7 +60,7 @@ async function processProfile(file) {
     return null;
   }
 
-  await workbook.xlsx.readFile(path);
+  await workbook.xlsx.readFile(file);
 
   // fetch sheet by id
   let worksheet = workbook.getWorksheet(2);
@@ -77,7 +79,7 @@ async function processProfile(file) {
     rowCount++;
   });
 
-  const rows = [{ path, rowCount }];
+  const rows = [{ file, rowCount }];
   const iterator = rows[Symbol.iterator]();
 
   // console.log("Rows in worksheet:", iterator);

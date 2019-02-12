@@ -8,7 +8,7 @@ export default /* GraphQL */ `
 
   type Profile {
     id: ID!
-    path: String!
+    file: String!
     rowCount: Int
   }
 
@@ -18,7 +18,7 @@ export default /* GraphQL */ `
 
   type Query {
     uploads: [File]
-    profile(file: FileInput!): [Profile]
+    profile(file: String!): [Profile]
   }
 
   type Mutation {

@@ -2,8 +2,8 @@ import gql from 'graphql-tag'
 
 export default gql`
   query profile {
-    profile(file: { path: "./uploads/uJbEi4xTz-sample-eq-vol.xlsx" } ) {
-      path
+    profile(file: "./uploads/uJbEi4xTz-sample-eq-vol.xlsx") {
+      file
       rowCount
     }
   }

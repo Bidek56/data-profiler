@@ -34,8 +34,8 @@ class Uploads extends Component {
       data: {
         query: `
         query profile {
-          profile(file: { path: "${path}" } ) {
-            path
+          profile(file: "${path}" ) {
+            file
             rowCount
           }
         }
