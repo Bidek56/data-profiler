@@ -39,11 +39,36 @@ const storeDB = file =>
     .last()
     .write()
 
+const deleteDB = path =>
+  db
+    .get('uploads')
+    .remove({ path: path })
+    .write()
+
 const processUpload = async upload => {
   const { createReadStream, filename, mimetype } = await upload
   const stream = createReadStream()
   const { id, path } = await storeFS({ stream, filename })
   return storeDB({ id, filename, mimetype, path })
+}
+
+const processDelete = async path => {
+  fs.unlink(path, err => {
+    if (err && err.code == 'ENOENT')
+      console.error(`File ${path} does NOT exists`)
+    else if (err) console.error('Error occurred while trying to remove file')
+    else console.log(`File ${path} was removed`)
+  })
+  const res = deleteDB(path)
+
+  if (res.length) return res[0]
+  else
+    return {
+      id: '1',
+      filename: 'Error',
+      mimetype: '',
+      path: 'File not found'
+    }
 }
 
 async function processProfile(obj) {
@@ -79,6 +104,7 @@ export default {
         )
 
       return resolve
-    }
+    },
+    delete: (obj, { path }) => processDelete(path)
   }
 }

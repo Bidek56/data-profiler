@@ -15,18 +15,8 @@ class Uploads extends Component {
     await this.getPosts()
   }
 
-  handleProcess = async postId => {
-    this.setState({
-      uploads: this.state.uploads.map(item => ({ ...item, profile: null }))
-    })
-
-    const file = this.state.uploads.filter(item => postId === item.id)
-
-    if (!file || file.length > 1)
-      // console.error('Path for: ' + postId + ' not found')
-      return
-
-    const [{ path }] = file
+  handleProfile = async path => {
+    if (!path) return
 
     let result = await axios({
       url: 'http://localhost:3001/graphql',
@@ -46,23 +36,39 @@ class Uploads extends Component {
 
     this.setState({
       uploads: this.state.uploads.map(item => {
-        if (postId === item.id)
+        if (path === item.path)
           return { ...item, profile: result.data.data.profile }
         else return item
       })
     })
   }
 
-  handleDelete = async () => {
-    // console.log("Delete:", postId);
-    // await fetch(`/posts/${postId}`, {
-    //   method: 'DELETE',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //     accept: 'application/json',
-    //   },
-    // });
-    // await this.getPosts();
+  handleDelete = async path => {
+    console.log('Delete:', path)
+    if (!path) return
+
+    let result = await axios({
+      url: 'http://localhost:3001/graphql',
+      method: 'post',
+      data: {
+        query: `
+        mutation deleye {
+          delete(path: "${path}" ) {
+            id
+            path
+          }
+        }
+          `
+      }
+    })
+
+    console.log('Res: ', result.data.data.delete)
+
+    const id = result.data.data.delete.id
+
+    this.setState({
+      uploads: this.state.uploads.filter(item => id != item.id)
+    })
   }
 
   render() {
@@ -75,7 +81,8 @@ class Uploads extends Component {
         <Table
           thead={
             <tr>
-              <Head>Process</Head>
+              <Head>Profile</Head>
+              <Head>Del</Head>
               <Head>Filename</Head>
               <Head>MIME type</Head>
               <Head>Path</Head>
@@ -84,7 +91,10 @@ class Uploads extends Component {
           tbody={this.state.uploads.map(({ id, filename, mimetype, path }) => (
             <tr key={id}>
               <td>
-                <button onClick={e => this.handleProcess(id)}>Process</button>
+                <button onClick={e => this.handleProfile(path)}>Profile</button>
+              </td>
+              <td>
+                <button onClick={e => this.handleDelete(path)}>Del</button>
               </td>
               <Cell>{filename}</Cell>
               <Cell>{mimetype}</Cell>

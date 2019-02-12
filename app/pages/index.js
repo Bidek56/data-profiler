@@ -6,10 +6,10 @@ import Uploads from '../components/Uploads'
 
 const IndexPage = () => (
   <Page title="Data Profiler">
-    <Section heading="Upload FileList">
+    <Section heading="Upload FileList" className="inline">
       <UploadFileList />
     </Section>
-    <Section heading="Upload File">
+    <Section heading="Upload File" className="inline">
       <UploadFile />
     </Section>
     <Section heading="Uploads">

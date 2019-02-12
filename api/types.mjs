@@ -24,5 +24,6 @@ export default /* GraphQL */ `
   type Mutation {
     singleUpload(file: Upload!): File!
     multipleUpload(files: [Upload!]!): [File!]!
+    delete(path: String!): File
   }
 `
