@@ -35,8 +35,9 @@ class Uploads extends Component {
         query: `
         query profile {
           profile(file: "${path}" ) {
-            file
-            rowCount
+            att1
+            att2
+            val
           }
         }
           `
@@ -94,10 +95,10 @@ class Uploads extends Component {
         <div>
           {this.state.uploads.length > 0
             ? this.state.uploads.map(item => {
-              if (item.profile)
-                // return item.profile[0].path + ":" + item.profile[0].rowCount;
-                return <Profile key={item.id} item={item} />
-            })
+                if (item.profile)
+                  // return item.profile[0].path + ":" + item.profile[0].rowCount;
+                  return <Profile key={item.id} item={item} />
+              })
             : 'No profiles to show'}
         </div>
       </div>
