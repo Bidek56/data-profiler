@@ -53,7 +53,7 @@ class Uploads extends Component {
       method: 'post',
       data: {
         query: `
-        mutation deleye {
+        mutation delete {
           delete(path: "${path}" ) {
             id
             path
@@ -75,7 +75,8 @@ class Uploads extends Component {
   render() {
     // console.log("Uploads2:", this.state.uploads);
 
-    if (!this.state) return <div>State is null</div>
+    if (!this.state || !this.state.uploads)
+      return <div>List of files is empty</div>
 
     return (
       <div>
