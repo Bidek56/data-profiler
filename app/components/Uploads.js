@@ -3,7 +3,8 @@ import { Component } from 'react'
 import { graphql } from 'react-apollo'
 import uploadsQuery from '../queries/uploads'
 import Profile from './Profile'
-import { Table, Head, Cell } from './Table'
+import Table from 'react-bootstrap/Table'
+import Button from 'react-bootstrap/Button'
 
 class Uploads extends Component {
   constructor(props) {
@@ -62,7 +63,7 @@ class Uploads extends Component {
       }
     })
 
-    console.log('Res: ', result.data.data.delete)
+    // console.log('Res: ', result.data.data.delete)
 
     const id = result.data.data.delete.id
 
@@ -78,30 +79,42 @@ class Uploads extends Component {
 
     return (
       <div>
-        <Table
-          thead={
+        <Table responsive>
+          <thead>
             <tr>
-              <Head>Profile</Head>
-              <Head>Del</Head>
-              <Head>Filename</Head>
-              <Head>MIME type</Head>
-              <Head>Path</Head>
+              <th>Profile</th>
+              <th>Del</th>
+              <th>Filename</th>
+              <th>MIME type</th>
+              <th>Path</th>
             </tr>
-          }
-          tbody={this.state.uploads.map(({ id, filename, mimetype, path }) => (
-            <tr key={id}>
-              <td>
-                <button onClick={e => this.handleProfile(path)}>Profile</button>
-              </td>
-              <td>
-                <button onClick={e => this.handleDelete(path)}>Del</button>
-              </td>
-              <Cell>{filename}</Cell>
-              <Cell>{mimetype}</Cell>
-              <Cell>{path}</Cell>
-            </tr>
-          ))}
-        />
+          </thead>
+          <tbody>
+            {this.state.uploads.map(({ id, filename, mimetype, path }) => (
+              <tr key={id}>
+                <td>
+                  <Button
+                    variant="primary"
+                    onClick={e => this.handleProfile(path)}
+                  >
+                    Profile
+                  </Button>
+                </td>
+                <td>
+                  <Button
+                    variant="danger"
+                    onClick={e => this.handleDelete(path)}
+                  >
+                    Del
+                  </Button>
+                </td>
+                <td>{filename}</td>
+                <td>{mimetype}</td>
+                <td>{path}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
         <div>
           {this.state.uploads.length > 0
             ? this.state.uploads.map(item => {

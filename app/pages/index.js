@@ -1,18 +1,14 @@
 import Page from '../components/Page'
 import Section from '../components/Section'
 import UploadFile from '../components/UploadFile'
-import UploadFileList from '../components/UploadFileList'
 import Uploads from '../components/Uploads'
 
 const IndexPage = () => (
   <Page title="Data Profiler">
-    <Section heading="Upload FileList" className="inline">
-      <UploadFileList />
-    </Section>
-    <Section heading="Upload File" className="inline">
+    <Section className="inline">
       <UploadFile />
     </Section>
-    <Section heading="Uploads">
+    <Section heading="List of uploads">
       <Uploads />
     </Section>
   </Page>
