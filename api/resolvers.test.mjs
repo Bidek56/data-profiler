@@ -3,6 +3,18 @@ import { ApolloServer, gql } from 'apollo-server-koa'
 import { createTestClient } from 'apollo-server-testing'
 import resolvers from './resolvers'
 import typeDefs from './types'
+import fs from 'fs'
+
+const LIST_UPLOADS = gql`
+  query uploads {
+    uploads {
+      id
+      filename
+      mimetype
+      path
+    }
+  }
+`
 
 const GET_PROFILE = gql`
   query profile($file: String!) {
@@ -25,6 +37,15 @@ const UPLOAD = gql`
   }
 `
 
+const DELETE = gql`
+  mutation delete($path: String!) {
+    delete(path: $path) {
+      id
+      path
+    }
+  }
+`
+
 let query = null
 let mutate = null
 
@@ -40,13 +61,47 @@ beforeAll(() => {
   mutate = client.mutate
 })
 
-it('profile one file', async () => {
-  const test_file = './uploads/IW0lb9EVl-sample-eq-vol.xlsx'
+it('test bad file delete', async () => {
+  let res = await mutate({
+    mutation: DELETE,
+    variables: { path: '/does/not/exist' }
+  })
+
+  // console.log('Del res:', res)
+
+  expect(res.errors).not.toBeUndefined()
+  expect(res.errors[0].message).not.toBeUndefined()
+  expect(res.errors[0].message).toEqual('File not found')
+})
+
+it('test file upload', async () => {
+  const test_file = 'sample-eq-vol.xlsx'
+
+  let res = await mutate({
+    mutation: UPLOAD,
+    variables: {
+      file: {
+        createReadStream: () => {
+          return fs.createReadStream(test_file)
+        },
+        filename: test_file
+      }
+    }
+  })
+
+  // console.log('Upload res:', res)
+
+  expect(res.errors).toBeUndefined()
+  expect(res.data.singleUpload).not.toBeUndefined()
+  expect(res.data.singleUpload.id).not.toBeUndefined()
+  expect(res.data.singleUpload.filename).toEqual(test_file)
+
+  const path = res.data.singleUpload.path
 
   // run query against the server and snapshot the output
-  const res = await query({
+  res = await query({
     query: GET_PROFILE,
-    variables: { file: test_file }
+    variables: { file: path }
   })
 
   expect(res.data).not.toBeUndefined()
@@ -54,17 +109,28 @@ it('profile one file', async () => {
   // console.log(res.data.profile)
   expect(res.data.profile.length).toEqual(5)
 
-  // const [{ file }] = res.data.profile
-  // expect(file).toEqual(test_file)
-})
-
-it('test file upload', async () => {
-  const test_file = 'C:/temp/sel.csv'
-
-  const res = await mutate({
-    mutation: UPLOAD,
-    variables: { file: test_file }
+  res = await mutate({
+    mutation: DELETE,
+    variables: { path }
   })
 
-  // console.log('Res:', res)
+  expect(res.errors).toBeUndefined()
+  expect(res.data.delete).not.toBeUndefined()
+  expect(res.data.delete.id).not.toBeUndefined()
+  expect(res.data.delete.path).toEqual(path)
+
+  // console.log('Del res:', res)
+})
+
+it('test upload list', async () => {
+  // run query against the server and snapshot the output
+  let res = await query({
+    query: LIST_UPLOADS
+  })
+
+  // console.log(res.data)
+
+  expect(res.errors).toBeUndefined()
+  expect(res.data.uploads).not.toBeUndefined()
+  expect(res.data.uploads.length).toBeGreaterThan(0)
 })
