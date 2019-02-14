@@ -21,7 +21,7 @@ module.exports = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: ['**/*.mjs'],
+  collectCoverageFrom: ['**/*.js'],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
@@ -34,7 +34,8 @@ module.exports = {
     'jestGlobalMocks.ts',
     '.module.ts',
     '<rootDir>/src/app/main.ts',
-    '.mock.ts'
+    '.mock.ts',
+    'jest.config.js'
   ],
 
   // A list of reporter names that Jest uses when writing coverage reports
@@ -143,7 +144,7 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: ['**/?(*.)+(spec|test).mjs'],
+  testMatch: ['**/?(*.)+(spec|test).js'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
@@ -167,7 +168,7 @@ module.exports = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.mjs$': 'babel-jest'
+    '^.+\\.js$': 'babel-jest'
   }
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
