@@ -12,6 +12,12 @@ export default /* GraphQL */ `
     val: Float
   }
 
+  type Correlation {
+    column_x: String
+    column_y: String
+    correlation: Float
+  }
+
   input FileInput {
     path: String!
   }
@@ -19,6 +25,7 @@ export default /* GraphQL */ `
   type Query {
     uploads: [File]
     profile(file: String!): [Profile]
+    correlate(file: String!): [Correlation]
   }
 
   type Mutation {

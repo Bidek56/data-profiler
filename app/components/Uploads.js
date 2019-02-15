@@ -3,6 +3,7 @@ import { Component } from 'react'
 import { graphql } from 'react-apollo'
 import uploadsQuery from '../queries/uploads'
 import Profile from './Profile'
+import Correlate from './Correlate'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 
@@ -42,6 +43,38 @@ class Uploads extends Component {
         else return item
       })
     })
+  }
+
+  handleCorrelate = async path => {
+    if (!path) return
+
+    let result = await axios({
+      url: 'http://localhost:3001/graphql',
+      method: 'post',
+      data: {
+        query: `
+        query correlate {
+          correlate(file: "${path}") {
+            column_x
+            column_y
+            correlation
+          }
+        }
+          `
+      }
+    })
+
+    console.log('Corr:', result.data.data)
+
+    this.setState({
+      uploads: this.state.uploads.map(item => {
+        if (path === item.path)
+          return { ...item, correlate: result.data.data.correlate }
+        else return item
+      })
+    })
+
+    console.log('State: ', this.state)
   }
 
   handleDelete = async path => {
@@ -96,9 +129,9 @@ class Uploads extends Component {
                 <td>
                   <Button
                     variant="primary"
-                    onClick={e => this.handleProfile(path)}
+                    onClick={e => this.handleCorrelate(path)}
                   >
-                    Profile
+                    Corr
                   </Button>
                 </td>
                 <td>
@@ -119,9 +152,12 @@ class Uploads extends Component {
         <div>
           {this.state.uploads.length > 0
             ? this.state.uploads.map(item => {
-                if (item.profile)
+                console.log('Item:', item.correlate)
+
+                if (item.correlate)
                   // return item.profile[0].path + ":" + item.profile[0].rowCount;
-                  return <Profile key={item.id} item={item} />
+                  // return <Profile key={item.id} item={item} />
+                  return <Correlate key={item.id} item={item} />
               })
             : 'No profiles to show'}
         </div>

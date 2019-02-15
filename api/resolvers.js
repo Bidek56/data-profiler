@@ -5,6 +5,7 @@ import mkdirp from 'mkdirp'
 import shortid from 'shortid'
 import alasql from 'alasql'
 import { UserInputError } from 'apollo-server-koa'
+import { num, arr } from 'jeezy'
 
 const UPLOAD_DIR = './uploads'
 const db = lowdb(new FileSync('db.json'))
@@ -70,6 +71,36 @@ const processDelete = path => {
     })
 }
 
+const correlate = () => {
+  try {
+    var data = []
+    // var cols = 'abcdefghijklmnopqrstuvwxyz'.split('')
+    var cols = 'abcdefg'.split('')
+    for (var i = 0; i <= 9; i++) {
+      var obj = { index: i }
+
+      cols.forEach(col => {
+        obj[col] = num.randBetween(1, 100)
+      })
+      data.push(obj)
+    }
+
+    // console.log(data)
+
+    const corr = arr.correlationMatrix(data, cols)
+    // console.log(corr)
+
+    return corr
+  } catch (ex) {
+    console.error(ex)
+  }
+}
+
+const processCorr = async ({ file }) => {
+  const corr = correlate()
+  return corr[Symbol.iterator]()
+}
+
 const processProfile = async ({ file }) => {
   let res = await alasql.promise(
     `select Banner as att1, Brand as att2, SUM(EqVol) as val from xlsx('${file}') group by Banner,Brand`
@@ -77,7 +108,6 @@ const processProfile = async ({ file }) => {
 
   // console.log('Res:', res)
   const iterator = res[Symbol.iterator]()
-
   // console.log("Rows in worksheet:", iterator);
   return iterator
 }
@@ -85,7 +115,8 @@ const processProfile = async ({ file }) => {
 export default {
   Query: {
     uploads: () => db.get('uploads').value(),
-    profile: (obj, file) => processProfile(file)
+    profile: (obj, file) => processProfile(file),
+    correlate: (obj, file) => processCorr(file)
   },
   Mutation: {
     singleUpload: (obj, { file }) => processUpload(file),
