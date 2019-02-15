@@ -1,10 +1,9 @@
 {
-  "name": "apollo-upload-examples-app",
+  "name": "data-profiler-app",
   "private": true,
   "license": "MIT",
   "author": {
-    "name": "Jayden Seric",
-    "email": "me@jaydenseric.com",
+    "name": "Darek",
     "url": "https://jaydenseric.com"
   },
   "engines": {
@@ -20,7 +19,6 @@
     "apollo-client": "^2.4.12",
     "apollo-link": "^1.2.8",
     "apollo-upload-client": "^10.0.0",
-    "axios": "^0.18.0",
     "babel-plugin-graphql-tag": "^1.6.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "bootstrap": "^4.3.0",

@@ -1,104 +1,148 @@
-import axios from 'axios'
 import { Component } from 'react'
-import { graphql } from 'react-apollo'
-import uploadsQuery from '../queries/uploads'
-import Profile from './Profile'
+// import Profile from './Profile'
 import Correlate from './Correlate'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import { graphql, withApollo } from 'react-apollo'
+import gql from 'graphql-tag'
+
+const DEL = gql`
+  mutation delete($path: String!) {
+    delete(path: $path) {
+      id
+      path
+    }
+  }
+`
+
+const UPLOADS = gql`
+  query uploads {
+    uploads {
+      id
+      filename
+      mimetype
+      path
+    }
+  }
+`
+
+const CORR = gql`
+  query correlate($file: String!) {
+    correlate(file: $file) {
+      column_x
+      column_y
+      correlation
+    }
+  }
+`
 
 class Uploads extends Component {
   constructor(props) {
     super(props)
-    this.state = { uploads: props.data.uploads }
+    this.state = {} // { uploads: props.data.uploads }
+    // console.log('Query: ', this.props)
+  }
+
+  async runQuery() {
+    const res = await this.props.client.query({
+      query: UPLOADS
+    })
+
+    if (!res || !res.data || !res.data.uploads) return
+
+    // console.log('Res:', res.data)
+
+    this.setState({
+      uploads: res.data.uploads
+    })
+  }
+
+  componentDidMount() {
+    console.log('Mount')
+    this.runQuery()
+  }
+
+  componentDidUpdate(oldProps) {
+    if (
+      this.props.data.uploads &&
+      oldProps.data.uploads &&
+      this.props.data.uploads !== oldProps.data.uploads
+    ) {
+      console.log(
+        'Uploads state:',
+        this.state,
+        ' props: ',
+        this.props.data.uploads
+      )
+      this.setState({ uploads: this.props.data.uploads })
+    }
   }
 
   handleCancel = async () => {
     await this.getPosts()
   }
 
-  handleProfile = async path => {
-    if (!path) return
+  // handleProfile = async path => {
+  //   if (!path) return
 
-    let result = await axios({
-      url: 'http://localhost:3001/graphql',
-      method: 'post',
-      data: {
-        query: `
-        query profile {
-          profile(file: "${path}" ) {
-            att1
-            att2
-            val
-          }
-        }
-          `
-      }
-    })
+  //   let result = await axios({
+  //     url: 'http://localhost:3001/graphql',
+  //     method: 'post',
+  //     data: {
+  //       query: `
+  //       query profile {
+  //         profile(file: "${path}" ) {
+  //           att1
+  //           att2
+  //           val
+  //         }
+  //       }
+  //         `
+  //     }
+  //   })
 
-    this.setState({
-      uploads: this.state.uploads.map(item => {
-        if (path === item.path)
-          return { ...item, profile: result.data.data.profile }
-        else return item
-      })
-    })
-  }
+  //   this.setState({
+  //     uploads: this.state.uploads.map(item => {
+  //       if (path === item.path)
+  //         return { ...item, profile: result.data.data.profile }
+  //       else return item
+  //     })
+  //   })
+  // }
 
   handleCorrelate = async path => {
     if (!path) return
 
-    let result = await axios({
-      url: 'http://localhost:3001/graphql',
-      method: 'post',
-      data: {
-        query: `
-        query correlate {
-          correlate(file: "${path}") {
-            column_x
-            column_y
-            correlation
-          }
-        }
-          `
-      }
+    const res = await this.props.client.query({
+      query: CORR,
+      variables: { file: path }
     })
 
-    console.log('Corr:', result.data.data)
+    if (!res || !res.data || !res.data.correlate) return
+
+    // console.log('Corr Res:', res.data)
 
     this.setState({
       uploads: this.state.uploads.map(item => {
         if (path === item.path)
-          return { ...item, correlate: result.data.data.correlate }
+          return { ...item, correlate: res.data.correlate }
         else return item
       })
     })
-
-    console.log('State in uploads: ', this.state)
   }
 
   handleDelete = async path => {
-    console.log('Delete:', path)
+    console.log('Deleteting:', path)
     if (!path) return
 
-    let result = await axios({
-      url: 'http://localhost:3001/graphql',
-      method: 'post',
-      data: {
-        query: `
-        mutation delete {
-          delete(path: "${path}" ) {
-            id
-            path
-          }
-        }
-          `
-      }
+    const res = await this.props.client.mutate({
+      mutation: DEL,
+      variables: { path }
     })
 
-    // console.log('Res: ', result.data.data.delete)
+    if (!res || !res.data) console.log('Res:', res)
 
-    const id = result.data.data.delete.id
+    const id = res.data.delete.id
 
     this.setState({
       uploads: this.state.uploads.filter(item => id != item.id)
@@ -108,8 +152,7 @@ class Uploads extends Component {
   render() {
     // console.log("Uploads2:", this.state.uploads);
 
-    if (!this.state || !this.state.uploads)
-      return <div>List of files is empty</div>
+    if (!this.state || !this.state.uploads) return <div>Loading.....</div>
 
     return (
       <div>
@@ -165,4 +208,5 @@ class Uploads extends Component {
   }
 }
 
-export default graphql(uploadsQuery)(Uploads)
+// export default withApollo(Uploads)
+export default graphql(UPLOADS)(withApollo(Uploads))
