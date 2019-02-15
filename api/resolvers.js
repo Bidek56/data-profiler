@@ -74,9 +74,9 @@ const processDelete = path => {
 const correlate = () => {
   try {
     var data = []
-    // var cols = 'abcdefghijklmnopqrstuvwxyz'.split('')
-    var cols = 'abcdefg'.split('')
-    for (var i = 0; i <= 9; i++) {
+    var cols = 'abcdefghijklmnopqrstuvwxyz'.split('')
+    // var cols = 'abcdef'.split('')
+    for (var i = 0; i <= 15; i++) {
       var obj = { index: i }
 
       cols.forEach(col => {

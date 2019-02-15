@@ -14,7 +14,7 @@ class Correlate extends Component {
   constructor(props) {
     super(props)
 
-    console.log('Chart data:', props.item)
+    // console.log('Chart data:', props.item)
     this.state = { item: props.item }
   }
 
@@ -48,8 +48,7 @@ class Correlate extends Component {
     columnTemplate.strokeWidth = 1
     columnTemplate.strokeOpacity = 0.2
     columnTemplate.stroke = bgColor
-    columnTemplate.tooltipText =
-      "{weekday}, {hour}: {value.workingValue.formatNumber('#.')}"
+    columnTemplate.tooltipText = "{value.workingValue.formatNumber('#.##')}"
     columnTemplate.width = am4core.percent(100)
     columnTemplate.height = am4core.percent(100)
 
@@ -88,7 +87,7 @@ class Correlate extends Component {
       heatLegend.valueAxis.hideTooltip()
     })
 
-    console.log('Data:', this.state.item.correlate)
+    // console.log('Will mount data:', this.state.item.correlate)
 
     chart.data = this.state.item.correlate
 
@@ -97,6 +96,17 @@ class Correlate extends Component {
 
   componentWillUnmount() {
     if (this.chart) this.chart.dispose()
+  }
+
+  componentDidUpdate(oldProps) {
+    if (
+      this.props.item &&
+      this.props.item.correlate &&
+      oldProps.item &&
+      oldProps.item.correlate &&
+      this.props.item.correlate !== oldProps.item.correlate
+    )
+      this.chart.data = this.props.item.correlate
   }
 
   render() {

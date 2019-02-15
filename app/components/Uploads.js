@@ -74,7 +74,7 @@ class Uploads extends Component {
       })
     })
 
-    console.log('State: ', this.state)
+    console.log('State in uploads: ', this.state)
   }
 
   handleDelete = async path => {
@@ -152,12 +152,11 @@ class Uploads extends Component {
         <div>
           {this.state.uploads.length > 0
             ? this.state.uploads.map(item => {
-                console.log('Item:', item.correlate)
-
-                if (item.correlate)
+                if (item.correlate) {
                   // return item.profile[0].path + ":" + item.profile[0].rowCount;
                   // return <Profile key={item.id} item={item} />
                   return <Correlate key={item.id} item={item} />
+                }
               })
             : 'No profiles to show'}
         </div>
