@@ -1,6 +1,6 @@
 import { Component } from 'react'
 // import Profile from './Profile'
-import Correlate from './Correlate'
+import { Correlate } from './Correlate'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { graphql, withApollo } from 'react-apollo'
