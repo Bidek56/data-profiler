@@ -1,6 +1,6 @@
 import { Component } from 'react'
 // import Profile from './Profile'
-import { Correlate } from './Correlate'
+import Correlate from './Correlate'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { graphql, withApollo } from 'react-apollo'
@@ -15,7 +15,7 @@ const DEL = gql`
   }
 `
 
-const UPLOADS = gql`
+const GET_UPLOADS = gql`
   query uploads {
     uploads {
       id
@@ -45,7 +45,7 @@ class Uploads extends Component {
 
   async runQuery() {
     const res = await this.props.client.query({
-      query: UPLOADS
+      query: GET_UPLOADS
     })
 
     if (!res || !res.data || !res.data.uploads) return
@@ -209,4 +209,4 @@ class Uploads extends Component {
 }
 
 // export default withApollo(Uploads)
-export default graphql(UPLOADS)(withApollo(Uploads))
+export default graphql(GET_UPLOADS)(withApollo(Uploads))

@@ -6,6 +6,7 @@ import shortid from 'shortid'
 import alasql from 'alasql'
 import { UserInputError } from 'apollo-server-koa'
 import { num, arr } from 'jeezy'
+import xlsx from 'xlsx'
 
 const UPLOAD_DIR = './uploads'
 const db = lowdb(new FileSync('db.json'))
@@ -74,8 +75,8 @@ const processDelete = path => {
 const correlate = () => {
   try {
     var data = []
-    var cols = 'abcdefghijklmnopqrstuvwxyz'.split('')
-    // var cols = 'abcdef'.split('')
+    // var cols = 'abcdefghijklmnopqrstuvwxyz'.split('')
+    var cols = 'abcdefghij'.split('')
     for (var i = 0; i <= 15; i++) {
       var obj = { index: i }
 
@@ -85,10 +86,10 @@ const correlate = () => {
       data.push(obj)
     }
 
-    // console.log(data)
+    // console.log('data:', data)
 
     const corr = arr.correlationMatrix(data, cols)
-    // console.log(corr)
+    // console.log('Corr len:', corr.length)
 
     return corr
   } catch (ex) {
@@ -96,8 +97,77 @@ const correlate = () => {
   }
 }
 
+const parseExcel = filename => {
+  console.log('File:', filename)
+
+  const workbook = xlsx.readFile(filename)
+
+  var sheet_name_list = workbook.SheetNames
+  console.log('Sheets:', sheet_name_list)
+
+  const xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]], {
+    header: 1
+  })
+
+  // const xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]], {
+  //   raw: true
+  // })
+
+  // const dd = xlData.map((val, idx) => {
+  //   return { ...val, index: idx }
+  // })
+
+  // console.log('Xl:', dd)
+
+  const numericVals = xlData[1].map(item => {
+    return typeof item === 'number'
+  })
+
+  console.log('Cols:', numericVals)
+
+  let numericArray = []
+
+  xlData.map(arry => {
+    let result = []
+
+    numericVals.map((val, idx) => {
+      if (val) result.push(arry[idx])
+    })
+
+    numericArray.push(result)
+  })
+
+  console.log('Cont:', xlData.length)
+  console.log('Numr:', numericArray.length)
+  const columns = numericArray[0]
+  console.log('Cols:', columns)
+
+  // const xlData2 = numericArray.slice(1)
+  // console.log('xlDate:', xlData2)
+
+  // return
+  // const columns = ['a1', 'b2', 'c3', 'd4']
+
+  const corr = arr.correlationMatrix(numericArray, columns)
+  console.log('Corr len:', corr)
+
+  return corr
+}
+
 const processCorr = async ({ file }) => {
+  console.log('In file:', file)
   const corr = correlate()
+
+  // let corr = [0]
+  // if (file.endsWith('.xlsx')) corr = parseExcel(file)
+  // else {
+  //   console.error('Invalid file type', file)
+
+  //   throw new UserInputError('Invalid file type', {
+  //     invalidArgs: file
+  //   })
+  // }
+
   return corr[Symbol.iterator]()
 }
 

@@ -11,7 +11,6 @@ if (process.browser) {
 }
 
 const createChart = (chart, data) => {
-  // var chart = am4core.create('chartdiv', am4charts.XYChart)
   chart.maskBullets = false
 
   var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
@@ -86,7 +85,7 @@ const createChart = (chart, data) => {
   // this.chart = chart
 }
 
-export const Correlate = initItem => {
+const Correlate = initItem => {
   const [initialized, setInitialized] = useState(false)
   const [item, setItem] = useState(initItem)
   const [prevItem, setPrevItem] = useState(null)
@@ -124,3 +123,5 @@ export const Correlate = initItem => {
     <div>Loading...</div>
   )
 }
+
+export default Correlate

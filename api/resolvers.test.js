@@ -151,13 +151,17 @@ it('test correlate', async () => {
   // run query against the server and snapshot the output
   let res = await query({
     query: GET_CORRELATION,
-    variables: { file: '/does/not/exist' }
+    // variables: { file: './uploads/hXK5nhFXP-sample-eq-vol.xlsx' }
+    variables: {
+      file:
+        '/mnt/c/Users/DarekChrostowski/Documents/NUSA/Kroger-iri/March2017.xlsx'
+    }
   })
 
-  console.log('Corr:', res)
-  console.log('Corr:', res.data)
+  // console.log('Corr:', res)
+  // console.log('Corr:', res.data)
 
-  // expect(res.errors).toBeUndefined()
-  // expect(res.data.uploads).not.toBeUndefined()
-  // expect(res.data.uploads.length).toBeGreaterThan(0)
+  expect(res.errors).toBeUndefined()
+  expect(res.data.correlate).not.toBeUndefined()
+  expect(res.data.correlate.length).toBeGreaterThan(0)
 })
