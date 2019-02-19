@@ -1,5 +1,5 @@
 import { Component } from 'react'
-// import Profile from './Profile'
+import Profile from './Profile'
 import Correlate from './Correlate'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
@@ -26,12 +26,22 @@ const GET_UPLOADS = gql`
   }
 `
 
-const CORR = gql`
+const GET_CORR = gql`
   query correlate($file: String!) {
     correlate(file: $file) {
       column_x
       column_y
       correlation
+    }
+  }
+`
+
+const GET_PROFILE = gql`
+  query profile($file: String!) {
+    profile(file: $file) {
+      att1
+      att2
+      val
     }
   }
 `
@@ -58,7 +68,6 @@ class Uploads extends Component {
   }
 
   componentDidMount() {
-    console.log('Mount')
     this.runQuery()
   }
 
@@ -68,12 +77,12 @@ class Uploads extends Component {
       oldProps.data.uploads &&
       this.props.data.uploads !== oldProps.data.uploads
     ) {
-      console.log(
-        'Uploads state:',
-        this.state,
-        ' props: ',
-        this.props.data.uploads
-      )
+      // console.log(
+      //   'Uploads state:',
+      //   this.state,
+      //   ' props: ',
+      //   this.props.data.uploads
+      // )
       this.setState({ uploads: this.props.data.uploads })
     }
   }
@@ -82,39 +91,29 @@ class Uploads extends Component {
     await this.getPosts()
   }
 
-  // handleProfile = async path => {
-  //   if (!path) return
+  handleProfile = async path => {
+    if (!path) return
 
-  //   let result = await axios({
-  //     url: 'http://localhost:3001/graphql',
-  //     method: 'post',
-  //     data: {
-  //       query: `
-  //       query profile {
-  //         profile(file: "${path}" ) {
-  //           att1
-  //           att2
-  //           val
-  //         }
-  //       }
-  //         `
-  //     }
-  //   })
+    const res = await this.props.client.query({
+      query: GET_PROFILE,
+      variables: { file: path }
+    })
 
-  //   this.setState({
-  //     uploads: this.state.uploads.map(item => {
-  //       if (path === item.path)
-  //         return { ...item, profile: result.data.data.profile }
-  //       else return item
-  //     })
-  //   })
-  // }
+    if (!res || !res.data || !res.data.profile) return
+
+    this.setState({
+      uploads: this.state.uploads.map(item => {
+        if (path === item.path) return { ...item, profile: res.data.profile }
+        else return item
+      })
+    })
+  }
 
   handleCorrelate = async path => {
     if (!path) return
 
     const res = await this.props.client.query({
-      query: CORR,
+      query: GET_CORR,
       variables: { file: path }
     })
 
@@ -160,6 +159,7 @@ class Uploads extends Component {
           <thead>
             <tr>
               <th>Profile</th>
+              {/* <th>Correlate</th> */}
               <th>Del</th>
               <th>Filename</th>
               <th>MIME type</th>
@@ -172,11 +172,19 @@ class Uploads extends Component {
                 <td>
                   <Button
                     variant="primary"
+                    onClick={e => this.handleProfile(path)}
+                  >
+                    Profile
+                  </Button>
+                </td>
+                {/* <td>
+                  <Button
+                    variant="primary"
                     onClick={e => this.handleCorrelate(path)}
                   >
                     Corr
                   </Button>
-                </td>
+                </td> */}
                 <td>
                   <Button
                     variant="danger"
@@ -197,8 +205,10 @@ class Uploads extends Component {
             ? this.state.uploads.map(item => {
                 if (item.correlate) {
                   // return item.profile[0].path + ":" + item.profile[0].rowCount;
-                  // return <Profile key={item.id} item={item} />
                   return <Correlate key={item.id} item={item} />
+                }
+                if (item.profile) {
+                  return <Profile key={item.id} item={item} />
                 }
               })
             : 'No profiles to show'}

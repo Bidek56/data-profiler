@@ -98,16 +98,11 @@ const Correlate = initItem => {
       setPrevItem(item)
 
       createChart(chartRef.current, item.item.correlate)
-      // chartRef.data = item.item.correlate
-      // console.log('Chart data:', chartRef.data)
-
       setInitialized(true)
     } else {
       console.log('update')
       if (prevItem !== initItem) {
         setItem(initItem)
-        // console.log('updating', chartRef)
-        // this.chart.data = this.props.item.correlate
         console.log('Updating with data:', item.item.correlate.length)
         chartRef.current.data = item.item.correlate
       }
