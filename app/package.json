@@ -2,9 +2,12 @@
   "name": "data-profiler-app",
   "private": true,
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/Bidek56/data-profiler.git"
+  },
   "author": {
     "name": "Darek",
-    "url": "https://jaydenseric.com"
+    "email": "darke.bidek@gmail.com"
   },
   "engines": {
     "node": ">=8.6"

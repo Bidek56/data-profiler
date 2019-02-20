@@ -1,9 +1,8 @@
-import '@babel/polyfill'
 import { ApolloServer, gql } from 'apollo-server-koa'
 import { createTestClient } from 'apollo-server-testing'
-import resolvers from './resolvers'
-import typeDefs from './types'
+import * as resolvers from './resolvers'
 import fs from 'fs'
+// import { GraphQLResponse } from 'graphql-extensions'
 
 const LIST_UPLOADS = gql`
   query uploads {
@@ -56,11 +55,12 @@ const DELETE = gql`
   }
 `
 
-let query = null
-let mutate = null
+let query: any
+let mutate: any
 
-beforeAll(() => {
-  // create a test server to test against, using our production typeDefs, resolvers, and dataSources.
+beforeAll(async () => {
+  const typeDefs = gql(fs.readFileSync('./typeDefs.graphql', 'UTF-8'))
+  //   // create a test server to test against, using our production typeDefs, resolvers, and dataSources.
   const server = new ApolloServer({
     typeDefs,
     resolvers
@@ -84,7 +84,7 @@ it.skip('test bad file delete', async () => {
   expect(res.errors[0].message).toEqual('File not found')
 })
 
-it.skip('test file upload', async () => {
+it('test file upload', async () => {
   const test_file = 'sample-eq-vol.xlsx'
 
   let res = await mutate({
@@ -107,6 +107,8 @@ it.skip('test file upload', async () => {
   expect(res.data.singleUpload.filename).toEqual(test_file)
 
   const path = res.data.singleUpload.path
+
+  console.log('Path:', path)
 
   // run query against the server and snapshot the output
   res = await query({
@@ -134,7 +136,7 @@ it.skip('test file upload', async () => {
   // console.log('Del res:', res)
 })
 
-it.skip('test upload list', async () => {
+it('test upload list', async () => {
   // run query against the server and snapshot the output
   let res = await query({
     query: LIST_UPLOADS

@@ -1,19 +1,22 @@
 {
-  "name": "apollo-upload-examples-api",
+  "name": "data-profiler-api",
   "private": true,
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/Bidek56/data-profiler.git"
+  },
   "author": {
-    "name": "Jayden Seric",
-    "email": "me@jaydenseric.com",
-    "url": "https://jaydenseric.com"
+    "name": "Darek",
+    "email": "darke.bidek@gmail.com"
   },
   "engines": {
     "node": ">=8.6"
   },
   "dependencies": {
-    "@babel/node": "^7.2.2",
     "@types/dotenv": "^6.1.0",
     "@types/lowdb": "^1.0.6",
+    "@types/mkdirp": "^0.5.2",
+    "@types/shortid": "^0.0.29",
     "alasql": "^0.4.11",
     "apollo-server-koa": "^2.4.2",
     "dotenv": "^6.2.0",
@@ -25,13 +28,9 @@
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
-    "@babel/polyfill": "^7.2.5",
-    "@babel/preset-env": "^7.3.1",
+    "@types/graphql": "^14.0.4",
+    "@types/jest": "^24.0.6",
     "apollo-server-testing": "^2.4.2",
-    "babel-eslint": "^10.0.1",
     "eslint": "^5.14.1",
     "eslint-config-env": "^3.0.0",
     "eslint-config-prettier": "^4.0.0",
@@ -41,15 +40,17 @@
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^24.1.0",
     "nodemon": "^1.18.10",
-    "prettier": "^1.16.4"
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.0",
+    "ts-node-dev": "^1.0.0-pre.32",
+    "typescript": "^3.3.3"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node -i db.json server.js",
-    "start": "node --experimental-modules -r dotenv/config server",
+    "start": "ts-node-dev --respawn server.ts",
     "lint": "eslint . --ext js && prettier '**/*.{json,yml,md}' -l",
     "prettier": "prettier --write --single-quote true --trailing-comma all --print-width 120 *.mjs",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watchAll",
     "babel": "babel resolvers.mjs"
   },
   "eslintConfig": {
