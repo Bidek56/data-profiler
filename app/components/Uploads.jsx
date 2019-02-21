@@ -49,8 +49,7 @@ const GET_PROFILE = gql`
 class Uploads extends Component {
   constructor(props) {
     super(props)
-    this.state = {} // { uploads: props.data.uploads }
-    // console.log('Query: ', this.props)
+    this.state = {}
   }
 
   async runQuery() {
@@ -59,8 +58,6 @@ class Uploads extends Component {
     })
 
     if (!res || !res.data || !res.data.uploads) return
-
-    // console.log('Res:', res.data)
 
     this.setState({
       uploads: res.data.uploads
@@ -77,12 +74,6 @@ class Uploads extends Component {
       oldProps.data.uploads &&
       this.props.data.uploads !== oldProps.data.uploads
     ) {
-      // console.log(
-      //   'Uploads state:',
-      //   this.state,
-      //   ' props: ',
-      //   this.props.data.uploads
-      // )
       this.setState({ uploads: this.props.data.uploads })
     }
   }
