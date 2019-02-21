@@ -30,40 +30,37 @@
   "devDependencies": {
     "@types/graphql": "^14.0.4",
     "@types/jest": "^24.0.6",
+    "@typescript-eslint/eslint-plugin": "^1.4.0",
     "apollo-server-testing": "^2.4.2",
     "eslint": "^5.14.1",
-    "eslint-config-env": "^3.0.0",
-    "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-import-order-alphabetical": "0.0.1",
     "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-prettier": "^3.0.1",
     "jest": "^24.1.0",
-    "nodemon": "^1.18.10",
-    "prettier": "^1.16.4",
     "ts-jest": "^24.0.0",
     "ts-node-dev": "^1.0.0-pre.32",
     "typescript": "^3.3.3"
   },
   "scripts": {
     "start": "ts-node-dev --respawn server.ts",
-    "lint": "eslint . --ext js && prettier '**/*.{json,yml,md}' -l",
-    "prettier": "prettier --write --single-quote true --trailing-comma all --print-width 120 *.mjs",
+    "lint": "eslint . --ext ts",
     "test": "jest",
-    "test:watch": "jest --watchAll",
-    "babel": "babel resolvers.mjs"
+    "test:watch": "jest --watchAll"
   },
   "eslintConfig": {
-    "extends": [
-      "env"
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint",
+      "import"
     ],
     "rules": {
       "require-jsdoc": "off"
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
     }
-  },
-  "prettier": {
-    "proseWrap": "never",
-    "singleQuote": true,
-    "semi": false
   }
 }

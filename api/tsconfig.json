@@ -28,5 +28,15 @@
     "rootDir": "src"
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/*.tsx", "./src/**/*.ts"]
+  "include": ["./src/**/*.tsx", "./src/**/*.ts"],
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+      "@typescript-eslint/restrict-plus-operands": "error"
+    }
+  }
 }
