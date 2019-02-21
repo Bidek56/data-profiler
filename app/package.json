@@ -22,8 +22,6 @@
     "apollo-client": "^2.4.13",
     "apollo-link": "^1.2.8",
     "apollo-upload-client": "^10.0.0",
-    "babel-plugin-graphql-tag": "^1.6.0",
-    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "bootstrap": "^4.3.1",
     "cross-fetch": "^3.0.1",
     "dotenv-cli": "^1.4.0",
@@ -36,7 +34,7 @@
     "react-dom": "^16.8.2"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "eslint": "^5.14.1",
     "eslint-config-env": "^3.0.0",
     "eslint-config-prettier": "^4.0.0",
@@ -79,8 +77,7 @@
       "next/babel"
     ],
     "plugins": [
-      "transform-inline-environment-variables",
-      "graphql-tag"
+      "transform-inline-environment-variables"
     ]
   }
 }
