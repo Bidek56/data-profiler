@@ -45,7 +45,9 @@ const UploadFile = ({ mutate }) => {
       }
     })
 
-  return <input type="file" required onChange={handleChange} />
+  return (
+    <input id="file-uploader" type="file" required onChange={handleChange} />
+  )
 }
 
 export default graphql(SINGLEUPLOAD)(UploadFile)

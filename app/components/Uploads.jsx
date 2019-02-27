@@ -50,6 +50,8 @@ class Uploads extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   async runQuery() {
@@ -65,15 +67,20 @@ class Uploads extends Component {
   }
 
   componentDidMount() {
+    console.log('Mount')
     this.runQuery()
   }
 
   componentDidUpdate(oldProps) {
+    console.log('Did Update old:', oldProps.data.uploads)
+    console.log('Did Update this:', this.props.data.uploads)
+
     if (
       this.props.data.uploads &&
       oldProps.data.uploads &&
       this.props.data.uploads !== oldProps.data.uploads
     ) {
+      console.log('Updating state:', this.props.data.uploads)
       this.setState({ uploads: this.props.data.uploads })
     }
   }
@@ -134,13 +141,19 @@ class Uploads extends Component {
 
     const id = res.data.delete.id
 
-    this.setState({
-      uploads: this.state.uploads.filter(item => id != item.id)
-    })
+    // console.log('Del:', id)
+
+    const afterDel = this.state.uploads.filter(item => path != item.path)
+
+    console.log('After del:', afterDel)
+
+    this.setState({ uploads: afterDel })
+
+    console.log('Did Update this2:', this.props.data.uploads)
   }
 
   render() {
-    // console.log("Uploads2:", this.state.uploads);
+    console.log('Render uploads:', this.state.uploads)
 
     if (!this.state || !this.state.uploads) return <div>Loading.....</div>
 
@@ -163,7 +176,7 @@ class Uploads extends Component {
                 <td>
                   <Button
                     variant="primary"
-                    onClick={e => this.handleProfile(path)}
+                    onClick={() => this.handleProfile(path)}
                   >
                     Profile
                   </Button>
@@ -179,7 +192,7 @@ class Uploads extends Component {
                 <td>
                   <Button
                     variant="danger"
-                    onClick={e => this.handleDelete(path)}
+                    onClick={() => this.handleDelete(path)}
                   >
                     Del
                   </Button>

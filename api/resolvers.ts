@@ -67,10 +67,7 @@ const deleteDB = (path: string) =>
 
 const processDelete = (path: string) => {
   fs.unlink(path, err => {
-    if (err && err.code == 'ENOENT')
-      throw new UserInputError('File not found', {
-        invalidArgs: path
-      })
+    if (err && err.code == 'ENOENT') console.error(`File ${path} not found`)
     else if (err) console.error('Error occurred while trying to remove file')
     // else console.log(`File ${path} was removed`)
   })

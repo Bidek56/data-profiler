@@ -14,9 +14,9 @@
   },
   "browserslist": "> 0.5%, not dead, node 8.6",
   "dependencies": {
-    "@amcharts/amcharts4": "^4.1.8",
+    "@amcharts/amcharts4": "^4.1.12",
     "@types/next": "^8.0.1",
-    "@types/react": "^16.8.3",
+    "@types/react": "^16.8.4",
     "@zeit/next-bundle-analyzer": "^0.1.2",
     "apollo-cache-inmemory": "^1.4.3",
     "apollo-client": "^2.4.13",
@@ -27,50 +27,24 @@
     "dotenv-cli": "^1.4.0",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
-    "next": "^8.0.1",
-    "react": "^16.8.2",
+    "next": "^8.0.3",
+    "react": "^16.8.3",
     "react-apollo": "^2.4.1",
     "react-bootstrap": "^1.0.0-beta.5",
-    "react-dom": "^16.8.2"
+    "react-dom": "^16.8.3"
   },
   "devDependencies": {
+    "@types/puppeteer": "^1.12.1",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
-    "eslint": "^5.14.1",
-    "eslint-config-env": "^3.0.0",
-    "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-import-order-alphabetical": "0.0.1",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.12.4",
-    "prettier": "^1.16.4"
+    "jest": "^24.1.0",
+    "puppeteer": "^1.12.2"
   },
   "scripts": {
     "dev": "dotenv next",
     "build": "dotenv next build",
     "start": "dotenv next start",
-    "test": "eslint . && prettier '**/*.{json,yml,md}' -l",
-    "lint": "eslint --ext js --ext jsx pages components || exit 0"
-  },
-  "eslintConfig": {
-    "settings": {
-      "react": {
-        "version": "16.8.2"
-      }
-    },
-    "extends": [
-      "env",
-      "eslint:recommended"
-    ],
-    "rules": {
-      "require-jsdoc": "off",
-      "react/prop-types": "off"
-    }
-  },
-  "prettier": {
-    "proseWrap": "never",
-    "singleQuote": true,
-    "semi": false
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "babel": {
     "presets": [
