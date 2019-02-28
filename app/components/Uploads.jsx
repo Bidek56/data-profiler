@@ -52,41 +52,43 @@ class Uploads extends Component {
 
     this.state = {
       uploads: []
-    };
+    }
   }
 
   async runQuery() {
     const res = await this.props.client.query({
       query: GET_UPLOADS,
-      fetchPolicy: "no-cache"
-    });
+      fetchPolicy: 'no-cache'
+    })
 
-    if (!res || !res.data || !res.data.uploads) return;
+    if (!res || !res.data || !res.data.uploads) return
 
     this.setState({
       uploads: res.data.uploads
-    });
+    })
   }
 
   componentDidMount() {
-    console.log('componentDidMount()');
+    console.log('componentDidMount()')
 
-    this.runQuery();
+    this.runQuery()
   }
 
   componentDidUpdate(props) {
-    console.log("componentDidUpdate()");
+    console.log('componentDidUpdate()')
 
     props.data.refetch().then(result => {
-      const uploads = Object.assign({}, this.state).uploads.sort().join();
-      const newUploads = result.data.uploads.sort().join();
+      const uploads = Object.assign({}, this.state)
+        .uploads.sort()
+        .join()
+      const newUploads = result.data.uploads.sort().join()
 
       if (uploads !== newUploads) {
         this.setState({
           uploads: result.data.uploads
         })
       }
-    });
+    })
   }
 
   handleCancel = async () => {
@@ -112,9 +114,9 @@ class Uploads extends Component {
   }
 
   handleCorrelate = async path => {
-    console.log("handleCorrelate(", path, ")");
+    console.log('handleCorrelate(', path, ')')
 
-    if (!path) return;
+    if (!path) return
 
     const res = await this.props.client.query({
       query: GET_CORR,
@@ -135,34 +137,28 @@ class Uploads extends Component {
   }
 
   handleDelete = async path => {
-    console.log("handleDelete(", path, ")");
-    
-    if (!path) return;
+    console.log('handleDelete(', path, ')')
+
+    if (!path) return
 
     const res = await this.props.client.mutate({
       mutation: DEL,
-      variables: { path }
-    });
+      variables: { path },
+      refetchQueries: { GET_UPLOADS }
+    })
 
-    if (!res || !res.data) return;
+    if (!res || !res.data) return
 
-    const uploads = Object.assign({}, this.state).uploads.filter(item => item.path !== path);
-
-    //const id = res.data.delete.id
-
-    // console.log('Del:', id)
-
-    //const afterDel = this.state.uploads.filter(item => path != item.path);
-
+    const uploads = Object.assign({}, this.state).uploads.filter(
+      item => item.path !== path
+    )
     //console.log("FILTERED:", JSON.stringify(afterDel));
 
-    this.setState({ uploads });
-
-    //console.log('Did Update this2:', this.props.data.uploads)
+    this.setState({ uploads })
   }
 
   render() {
-    console.log('render({ uploads:', this.state.uploads, "})");
+    console.log('render({ uploads:', this.state.uploads, '})')
 
     if (!this.state || !this.state.uploads) return <div>Loading.....</div>
 

@@ -9,8 +9,8 @@ beforeAll(async () => {
   await page.tracing.start({ path: 'trace.json' })
 })
 
-describe('Google Homepage', () => {
-  test('can load localhost', async () => {
+describe('Data profiler homepage', () => {
+  test('can load localhost', async done => {
     // console.log('Page:', page)
     try {
       await page.goto('http://localhost:3000', {
@@ -28,25 +28,46 @@ describe('Google Homepage', () => {
     const fileInput = await page.$('input[type="file"]')
     // console.log('Uploader:', fileInput)
 
-    await fileInput.uploadFile('../api/sample-eq-vol.xlsx')
+    const SAMPLE_FILE_NAME = 'sample-eq-vol.xlsx'
 
-    // await page.waitForNavigation({ waitUntil: 'networkidle2' })
+    await fileInput.uploadFile('../api/' + SAMPLE_FILE_NAME)
+    await page.waitFor(1000) // or w/ `waitForNavigation()`
 
-    // const res = await page.$('.table-responsive')
-    // console.log('Res:', res)
-
-    const data = await page.$$eval('table tr td', tds =>
+    const tdFilesAfterUpload = await page.$$eval('table tr td', tds =>
       tds.map(td => {
         return td.innerHTML
       })
     )
 
-    console.log(data)
+    // find all sample files
+    let found = tdFilesAfterUpload.filter(x => x === SAMPLE_FILE_NAME)
 
-    const found = data.filter(x => x === 'sample-eq-vol.xlsx')
+    // check to see if a file was uploaded
+    expect(found.length).toBeGreaterThan(0)
 
-    console.log(found)
-  })
+    const linkHandlers = await page.$x("//button[contains(text(), 'Del')]")
+
+    if (linkHandlers.length > 0) {
+      await linkHandlers[0].click()
+    } else {
+      console.error('Link not found')
+    }
+
+    await page.waitFor(1000) // or w/ `waitForNavigation()`
+
+    const tdFilesAfterDelete = await page.$$eval('table tr td', tds =>
+      tds.map(td => {
+        return td.innerHTML
+      })
+    )
+
+    found = tdFilesAfterDelete.filter(x => x === SAMPLE_FILE_NAME)
+
+    // check to see if a file was deleted
+    expect(found.length).toEqual(0)
+
+    done()
+  }, 5000)
 
   test.skip('has title "Google"', async () => {
     // console.log('Page:', page)
