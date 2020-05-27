@@ -52,18 +52,17 @@ const storeFS = ({
   )
 }
 
-const storeDB = (file: StoreConfig) =>
-  db
-    .get('uploads')
-    .push(file)
+const storeDB = (file: StoreConfig) => {
+  const data: any = db.get('uploads')
+  return data.push(file)
     .last()
     .write()
+}
 
-const deleteDB = (path: string) =>
-  db
-    .get('uploads')
-    .remove({ path: path })
-    .write()
+const deleteDB = (path: string) => {
+  const data: any = db.get('uploads')
+  return data.remove({ path: path }).write()
+}
 
 const processDelete = (path: string) => {
   fs.unlink(path, err => {

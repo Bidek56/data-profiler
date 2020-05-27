@@ -59,7 +59,7 @@ let query: any
 let mutate: any
 
 beforeAll(async () => {
-  const typeDefs = gql(fs.readFileSync('./typeDefs.graphql', 'UTF-8'))
+  const typeDefs = gql(fs.readFileSync('./typeDefs.graphql', "utf-8"))
   //   // create a test server to test against, using our production typeDefs, resolvers, and dataSources.
   const server = new ApolloServer({
     typeDefs,
