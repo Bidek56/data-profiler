@@ -1,4 +1,4 @@
-import fs from 'fs'
+import {readFileSync} from 'fs'
 import { ApolloServer, gql } from 'apollo-server-koa'
 import Koa from 'koa'
 import * as resolvers from './resolvers'
@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 const main = async () => {
   const app = new Koa()
 
-  const typeDefs = gql(fs.readFileSync('./typeDefs.graphql', 'UTF-8'))
+  const typeDefs = gql(readFileSync('./typeDefs.graphql', 'utf8'))
 
   dotenv.config()
 

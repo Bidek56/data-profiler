@@ -49,11 +49,9 @@ export default class CustomApp extends App {
   render() {
     const { Component, pageProps } = this.props
     return (
-      <Container>
-        <ApolloProvider client={this.apolloClient}>
-          <Component {...pageProps} />
-        </ApolloProvider>
-      </Container>
+      <ApolloProvider client={this.apolloClient}>
+        <Component {...pageProps} />
+      </ApolloProvider>
     )
   }
 }
