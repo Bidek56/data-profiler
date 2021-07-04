@@ -25,10 +25,7 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
-    "@types/dotenv": "^8.2.0",
-    "@types/graphql": "^14.5.0",
     "@types/jest": "^26.0.23",
-    "@types/lowdb": "^1.0.10",
     "@types/mkdirp": "^1.0.1",
     "@types/shortid": "^0.0.29",
     "apollo-server-testing": "^2.25.2",
