@@ -4,7 +4,8 @@ import FileSync from 'lowdb/adapters/FileSync'
 import mkdirp from 'mkdirp'
 import shortid from 'shortid'
 import alasql from 'alasql'
-import { UserInputError } from 'apollo-server-koa'
+import {UserInputError} from 'apollo-server';
+import { ApolloServerFileUploads } from 'ApolloServerFileUploads';
 
 const num = require('jeezy').num
 const arr = require('jeezy').arr
@@ -66,17 +67,18 @@ const deleteDB = (path: string) => {
 
 const processDelete = (path: string) => {
   fs.unlink(path, err => {
-    if (err && err.code == 'ENOENT') console.error(`File ${path} not found`)
-    else if (err) console.error('Error occurred while trying to remove file')
+    if (err && err.code == 'ENOENT') new UserInputError('File not found', {invalidArgs: path})
+    // console.error(`File ${path} not found`)
+    else if (err) new UserInputError('Error occurred while trying to remove file', {invalidArgs: path})
     // else console.log(`File ${path} was removed`)
   })
   const res = deleteDB(path)
 
+  // console.log("Del:", res)
+
   if (res.length) return res[0]
-  else
-    throw new UserInputError('File not found', {
-      invalidArgs: path
-    })
+  else 
+    throw new UserInputError('File not found', { invalidArgs: path })
 }
 
 const correlate = () => {
@@ -107,6 +109,8 @@ const correlate = () => {
 const processCorr = async (file: string) => {
   const corr = correlate()
 
+  // console.log("F:", file)
+
   // let corr = [0]
   // if (file.endsWith('.xlsx')) corr = parseExcel(file)
   // else {
@@ -120,8 +124,11 @@ const processCorr = async (file: string) => {
   return corr[Symbol.iterator]()
 }
 
-const processUpload = async (upload: any) => {
-  const { createReadStream, filename, mimetype } = await upload
+const processUpload = async (file: ApolloServerFileUploads.File) => {
+  // console.log("upload:", file)
+  const { createReadStream, filename, mimetype } = await file
+  // console.log("createReadStream:", createReadStream)
+
   const stream: fs.ReadStream = <fs.ReadStream>createReadStream()
   const returned: StoreConfig = await storeFS({
     stream,
@@ -135,7 +142,7 @@ export type Maybe<T> = T | null
 
 const processProfile = async (file: string): Promise<any[]> => {
   let res = await alasql.promise(
-    `select Banner as att1, Brand as att2, SUM(EqVol) as val from xlsx('${file}') group by Banner,Brand`
+    `select Segment as att1, Country as att2, SUM(Sales) as val from xlsx('${file}') group by Segment,Country`
   )
 
   return res[Symbol.iterator]()
@@ -148,6 +155,6 @@ export const Query = {
 }
 
 export const Mutation = {
-  singleUpload: (obj: any, { file }: { file: string }) => processUpload(file),
+  singleUpload: (parent: any, { file }: { file: ApolloServerFileUploads.File }): Promise<ApolloServerFileUploads.UploadedFileResponse> => processUpload(file),
   delete: (obj: any, { path }: { path: string }) => processDelete(path)
 }

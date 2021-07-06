@@ -1,39 +1,29 @@
 import {readFileSync} from 'fs'
-import { ApolloServer, gql } from 'apollo-server-koa'
-import Koa from 'koa'
+import express from 'express'
+import { ApolloServer, gql } from 'apollo-server-express'
 import * as resolvers from './resolvers'
 import dotenv from 'dotenv'
+import { graphqlUploadExpress } from 'graphql-upload'
 
 const main = async () => {
-  const app = new Koa()
 
   const typeDefs = gql(readFileSync('./typeDefs.graphql', 'utf8'))
 
   dotenv.config()
 
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    uploads: {
-      // Limits here should be stricter than config for surrounding
-      // infrastructure such as Nginx so errors can be handled elegantly by
-      // graphql-upload:
-      // https://github.com/jaydenseric/graphql-upload#type-uploadoptions
-      maxFileSize: 10000000, // 10 MB
-      maxFiles: 20
-    }
-  })
+  const server = new ApolloServer({ typeDefs, resolvers })
 
-  server.applyMiddleware({ app })
+  await server.start();
 
-  app.listen(process.env.PORT, () => {
-    // eslint-disable-next-line no-console
-    console.info(
-      `Serving http://localhost:${process.env.PORT} for ${
-        process.env.NODE_ENV
-      }.`
-    )
-  })
+  const app = express();
+
+  // This middleware should be added before calling `applyMiddleware`.
+  app.use(graphqlUploadExpress());
+  server.applyMiddleware({ app });
+
+  await app.listen({ port: process.env.PORT })
+
+  console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`);
 }
 
 main().catch(error => console.error(error))

@@ -6,9 +6,9 @@ const Page = ({ title, children }) => (
       <title>{title}</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="theme-color" content="#ffffff" />
-      <link rel="manifest" href="/static/manifest.webmanifest" />
-      <link rel="icon" sizes="192x192" href="/static/icon.png" />
-      <link rel="apple-touch-icon" href="/static/launcher-icon.png" />
+      {/* <link rel="manifest" href="/public/site.webmanifest" /> */}
+      <link rel="icon" sizes="192x192" href="/public/icon.png" />
+      <link rel="apple-touch-icon" href="/public/launcher-icon.png" />
       <link
         rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"

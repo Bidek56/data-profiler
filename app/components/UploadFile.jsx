@@ -1,6 +1,4 @@
-import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
-
+import { useQuery, gql } from "@apollo/client";
 
 const UPLOADS = gql`
   query uploads {
@@ -32,6 +30,8 @@ const UploadFile = ({ mutate }) => {
       files: [file]
     } = target;
 
+    console.log("Valid:", validity.valid)
+
     return validity.valid &&
 
     mutate({
@@ -56,4 +56,4 @@ const UploadFile = ({ mutate }) => {
   )
 }
 
-export default graphql(SINGLEUPLOAD)(UploadFile)
+export default UploadFile;

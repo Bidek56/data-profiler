@@ -1,5 +1,10 @@
 # GraphQL schema file
 
+# The implementation for this scalar is provided by the
+# 'GraphQLUpload' export from the 'graphql-upload' package
+# in the resolver map below.
+scalar Upload
+
 type File {
   id: ID!
   path: String!
