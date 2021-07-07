@@ -4,7 +4,7 @@ import UploadFile from '../components/UploadFile'
 import Uploads from '../components/Uploads'
 
 const IndexPage = () => (
-  <Page title="Data Profiler">
+  <Page title="Data Profiler" >
     <Section className="inline">
       <UploadFile />
     </Section>

@@ -124,10 +124,14 @@ const processCorr = async (file: string) => {
   return corr[Symbol.iterator]()
 }
 
-const processUpload = async (file: ApolloServerFileUploads.File) => {
-  // console.log("upload:", file)
+const processUpload = async (parent:any, {file}:{ file: ApolloServerFileUploads.File}): Promise<ApolloServerFileUploads.UploadedFileResponse> => {
+  console.log("upload:", file)
   const { createReadStream, filename, mimetype } = await file
-  // console.log("createReadStream:", createReadStream)
+  console.log("filename:", filename)
+  console.log("createReadStream:", createReadStream)
+
+  // if (!createReadStream) 
+  //   throw new UserInputError('Null read stream', { invalidArgs: filename })
 
   const stream: fs.ReadStream = <fs.ReadStream>createReadStream()
   const returned: StoreConfig = await storeFS({
@@ -155,6 +159,6 @@ export const Query = {
 }
 
 export const Mutation = {
-  singleUpload: (parent: any, { file }: { file: ApolloServerFileUploads.File }): Promise<ApolloServerFileUploads.UploadedFileResponse> => processUpload(file),
+  singleUpload: (parent: any, { file }: { file: ApolloServerFileUploads.File }): Promise<ApolloServerFileUploads.UploadedFileResponse> => processUpload(parent, {file}),
   delete: (obj: any, { path }: { path: string }) => processDelete(path)
 }

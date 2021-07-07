@@ -2,7 +2,7 @@
 // import Correlate from './Correlate'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
 
 const DEL = gql`
   mutation delete($path: String!) {
@@ -44,7 +44,8 @@ const GET_PROFILE = gql`
   }
 `
 
-//   handleProfile = async path => {
+const handleProfile = async path => {
+  console.log("Path: ", path)
 //     if (!path) return
 
 //     const res = await this.props.client.query({
@@ -60,7 +61,7 @@ const GET_PROFILE = gql`
 //         else return item
 //       })
 //     })
-//   }
+}
 
 //   handleCorrelate = async path => {
 //     console.log('handleCorrelate(', path, ')')
@@ -85,37 +86,26 @@ const GET_PROFILE = gql`
 //     })
 //   }
 
-//   handleDelete = async path => {
-//     console.log('handleDelete(', path, ')')
-
-//     if (!path) return
-
-//     const res = await this.props.client.mutate({
-//       mutation: DEL,
-//       variables: { path },
-//       refetchQueries: { GET_UPLOADS }
-//     })
-
-//     if (!res || !res.data) return
-
-//     const uploads = Object.assign({}, this.state).uploads.filter(
-//       item => item.path !== path
-//     )
-//     //console.log("FILTERED:", JSON.stringify(afterDel));
-
-//     this.setState({ uploads })
-//   }
-
 export default function Uploads() {
-  const { data, loading, error } = useQuery(GET_UPLOADS);
-  if (loading) {
-    return <div>Loading.....</div>;
-  }
 
-  if (error) {
-    console.error(error);
-    return null;
-  }
+  const { data, loading, error } = useQuery(GET_UPLOADS);
+  const [del] = useMutation(DEL, {
+    // Remove from the cache
+    update(cache, {data: {del}}) {
+      cache.modify( {
+        fields: {
+          uploads(existingUploads, {DELETE }) {
+            return DELETE;
+          },
+        },
+      })
+    }
+  });
+
+  if (loading) return <div suppressHydrationWarning={true}><p>Loading.....</p></div>;
+  if (error) return <div suppressHydrationWarning={true}>{JSON.stringify(error, null, 2)}</div>;
+
+  // console.log("data len:", data.uploads.length)
 
   return (
     <div>
@@ -133,10 +123,10 @@ export default function Uploads() {
            {data.uploads.map(({ id, filename, mimetype, path }) => (
               <tr key={id}>
                 <td>
-                  <Button variant="primary" onClick={() => this.handleProfile(path)}>Profile</Button>
+                  <Button variant="primary" onClick={() => handleProfile(path)}>Profile</Button>
                 </td>
                 <td>
-                   <Button variant="danger" onClick={() => this.handleDelete(path)}>Del</Button>
+                   <Button variant="danger" onClick={() => del( { variables: { path }} )}>Del</Button>
                  </td>
                  <td>{filename}</td>
                  <td>{mimetype}</td>

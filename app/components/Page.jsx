@@ -9,12 +9,8 @@ const Page = ({ title, children }) => (
       {/* <link rel="manifest" href="/public/site.webmanifest" /> */}
       <link rel="icon" sizes="192x192" href="/public/icon.png" />
       <link rel="apple-touch-icon" href="/public/launcher-icon.png" />
-      <link
-        rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-        crossOrigin="anonymous"
-      />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossOrigin="anonymous"/>
     </Head>
     {children}
     <style jsx global>{`

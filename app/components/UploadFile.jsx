@@ -1,18 +1,8 @@
-import { useQuery, gql } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
+import { Fragment } from 'react';
 
-const UPLOADS = gql`
-  query uploads {
-    uploads {
-      id
-      filename
-      mimetype
-      path
-    }
-  }
-`
-
-const SINGLEUPLOAD = gql`
-  mutation($file: Upload!) {
+const SINGLE_UPLOAD = gql`
+  mutation Upload($file: Upload!) {
     singleUpload(file: $file) {
       id
       filename
@@ -22,38 +12,24 @@ const SINGLEUPLOAD = gql`
   }
 `
 
-const UploadFile = ({ mutate }) => {
-  const handleChange = e => {
-    const { target } = e;
-    const {
-      validity,
-      files: [file]
-    } = target;
-
-    console.log("Valid:", validity.valid)
-
-    return validity.valid &&
-
-    mutate({
-      variables: { file },
-      update: (store, { data: { singleUpload }}) => {
-        const data = store.readQuery({ query: UPLOADS });
-
-        console.log("UPLOAD:", singleUpload.path);
-
-        data.uploads.push(singleUpload);
-        store.writeQuery({ query: UPLOADS, data });
-
-        // Reset the input so onChange can fire again
-        target.type = "";
-        target.type = "file";
-      }
-    });
+const UploadFile = () => {
+  const [uploadFile, { loading, error }] = useMutation(SINGLE_UPLOAD);
+  
+  const onChange = ({
+    target: { validity, files: [file] }
+  }) => {
+    console.log(file);
+    validity.valid && uploadFile({ variables: { file } }) 
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error)   return <div>{JSON.stringify(error, null, 2)}</div>;
+
   return (
-    <input id="file-uploader" type="file" required onChange={handleChange} />
-  )
-}
+    <Fragment>
+      <input id="file-uploader" type="file" required onChange={onChange} />
+    </Fragment>
+  );
+};
 
 export default UploadFile;
