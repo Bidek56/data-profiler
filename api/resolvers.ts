@@ -124,7 +124,7 @@ const processCorr = async (file: string) => {
   return corr[Symbol.iterator]()
 }
 
-const processUpload = async (parent:any, {file}:{ file: ApolloServerFileUploads.File}): Promise<ApolloServerFileUploads.UploadedFileResponse> => {
+const processUpload = async (parent:any, {file}:{ file: ApolloServerFileUploads.Upload}): Promise<ApolloServerFileUploads.UploadedFileResponse> => {
   console.log("upload:", file)
   const { createReadStream, filename, mimetype } = await file
   console.log("filename:", filename)
@@ -159,6 +159,6 @@ export const Query = {
 }
 
 export const Mutation = {
-  singleUpload: (parent: any, { file }: { file: ApolloServerFileUploads.File }): Promise<ApolloServerFileUploads.UploadedFileResponse> => processUpload(parent, {file}),
+  singleUpload: (parent: any, { file }: { file: ApolloServerFileUploads.Upload }): Promise<ApolloServerFileUploads.UploadedFileResponse> => processUpload(parent, {file}),
   delete: (obj: any, { path }: { path: string }) => processDelete(path)
 }

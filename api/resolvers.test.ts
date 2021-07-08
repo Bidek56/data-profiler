@@ -84,7 +84,9 @@ it('test file upload', async () => {
           createReadStream: () => {
             return fs.createReadStream(test_file)
           },
-          filename: test_file
+          filename: test_file,
+          mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          encoding: '7bit'
         }
       } } );
     // console.log('Upload res:', res)
