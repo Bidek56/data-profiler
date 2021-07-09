@@ -13,13 +13,24 @@ const SINGLE_UPLOAD = gql`
 `
 
 const UploadFile = () => {
-  const [uploadFile, { loading, error }] = useMutation(SINGLE_UPLOAD);
+  const [uploadFile, { loading, error }] = useMutation(SINGLE_UPLOAD,
+   {
+     update( cache, { data: { uploadFile }}) {
+       cache.modify({
+         id: cache.identify(""),
+         fields: {
+           // TODO: https://www.apollographql.com/docs/react/caching/cache-interaction/
+         }
+       });
+     }
+   }
+  );
   
   const onChange = ({
     target: { validity, files: [file] }
   }) => {
     console.log(file);
-    validity.valid && uploadFile({ variables: { file } }) 
+    validity.valid && uploadFile({ variables: { file } })    
   };
 
   if (loading) return <div>Loading...</div>;

@@ -34,8 +34,8 @@ const GET_PROFILE = gql`
 `
 
 const UPLOAD = gql`
-  mutation upload($file: Upload!) {
-    singleUpload(file: $file) {
+  mutation upload($upload: Upload!) {
+    singleUpload(file: $upload) {
       id
       filename
       mimetype
@@ -80,13 +80,13 @@ it('test file upload', async () => {
   let res = await server.executeOperation({ 
     query: UPLOAD,
       variables: {
-        file: {
-          createReadStream: () => {
-            return fs.createReadStream(test_file)
-          },
-          filename: test_file,
-          mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          encoding: '7bit'
+        upload: {
+          file: {
+            createReadStream: () => fs.createReadStream(test_file),
+            filename: test_file,
+            mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            encoding: '7bit'
+          }
         }
       } } );
     // console.log('Upload res:', res)

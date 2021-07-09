@@ -1,5 +1,5 @@
-// import Profile from './Profile'
-// import Correlate from './Correlate'
+import Profile from './Profile'
+import Correlate from './Correlate'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { useQuery, useMutation, gql } from "@apollo/client";
