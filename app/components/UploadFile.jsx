@@ -11,25 +11,35 @@ const SINGLE_UPLOAD = gql`
     }
   }
 `
+const GET_UPLOADS = gql`
+  query uploads {
+    uploads {
+      id
+      filename
+      mimetype
+      path
+    }
+  }
+`
 
 const UploadFile = () => {
-  const [uploadFile, { loading, error }] = useMutation(SINGLE_UPLOAD,
-   {
-     update( cache, { data: { uploadFile }}) {
-       cache.modify({
-         id: cache.identify(""),
-         fields: {
-           // TODO: https://www.apollographql.com/docs/react/caching/cache-interaction/
-         }
-       });
-     }
-   }
-  );
+  const [uploadFile, { loading, error }] = useMutation(SINGLE_UPLOAD, {
+
+    // update the cache
+    update( cache, { data: {singleUpload}}) {
+      const {uploads} = cache.readQuery( { query: GET_UPLOADS } );
+
+      cache.writeQuery({
+        query: GET_UPLOADS,
+        data: { uploads: uploads.concat([singleUpload]) },
+      });
+    }   
+  });
   
   const onChange = ({
     target: { validity, files: [file] }
   }) => {
-    console.log(file);
+    // console.log(file);
     validity.valid && uploadFile({ variables: { file } })    
   };
 

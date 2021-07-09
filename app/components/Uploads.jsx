@@ -45,48 +45,14 @@ const GET_PROFILE = gql`
 `
 
 const handleProfile = async path => {
-  console.log("Path: ", path)
-//     if (!path) return
-
-//     const res = await this.props.client.query({
-//       query: GET_PROFILE,
-//       variables: { file: path }
-//     })
-
-//     if (!res || !res.data || !res.data.profile) return
-
-//     this.setState({
-//       uploads: this.state.uploads.map(item => {
-//         if (path === item.path) return { ...item, profile: res.data.profile }
-//         else return item
-//       })
-//     })
+  console.log("Profile path: ", path)
+  if (!path) return
 }
 
-//   handleCorrelate = async path => {
-//     console.log('handleCorrelate(', path, ')')
-
-//     if (!path) return
-
-//     const res = await this.props.client.query({
-//       query: GET_CORR,
-//       variables: { file: path }
-//     })
-
-//     if (!res || !res.data || !res.data.correlate) return
-
-//     // console.log('Corr Res:', res.data)
-
-//     this.setState({
-//       uploads: this.state.uploads.map(item => {
-//         if (path === item.path)
-//           return { ...item, correlate: res.data.correlate }
-//         else return item
-//       })
-//     })
-//   }
-
 export default function Uploads() {
+
+  // const { corrData, corrLoading, corrError } = useQuery(GET_CORR);
+  // const { profileData, profileLoading, profileError } = useQuery(GET_PROFILE);
 
   const { data, loading, error } = useQuery(GET_UPLOADS);
   const [del] = useMutation(DEL, {
