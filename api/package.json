@@ -13,7 +13,6 @@
     "node": ">=16.0"
   },
   "dependencies": {
-    "@babel/preset-typescript": "^7.14.5",
     "alasql": "^1.7.3",
     "apollo-server": "^3.0.0",
     "apollo-server-express": "^3.0.0",
@@ -26,10 +25,10 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
-    "@types/graphql-upload": "^8.0.5",
-    "@types/jest": "^26.0.23",
-    "@types/lowdb": "^1.0.10",
-    "@types/mkdirp": "^1.0.1",
+    "@types/graphql-upload": "^8.0.6",
+    "@types/jest": "^26.0.24",
+    "@types/lowdb": "^1.0.11",
+    "@types/mkdirp": "^1.0.2",
     "@types/shortid": "^0.0.29",
     "jest": "^27.0.6",
     "ts-jest": "^27.0.3",
