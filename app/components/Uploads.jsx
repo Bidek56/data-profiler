@@ -1,6 +1,6 @@
 import Profile from './Profile'
 import Correlate from './Correlate'
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -66,7 +66,7 @@ const useStyles = makeStyles({
 export default function Uploads() {
 
   // const { corrData, corrLoading, corrError } = useQuery(GET_CORR);
-  // const { profileData, profileLoading, profileError } = useQuery(GET_PROFILE);
+  const [ getProfile, profile ] = useLazyQuery(GET_PROFILE);
 
   const classes = useStyles();
   const { data, loading, error } = useQuery(GET_UPLOADS);
@@ -88,6 +88,12 @@ export default function Uploads() {
 
   // console.log("data len:", data.uploads.length)
 
+  if (profile.loading) return <div suppressHydrationWarning={true}><p>Loading Profile.....</p></div>;
+  if (profile.error) return <div suppressHydrationWarning={true}>{JSON.stringify(profile.error, null, 2)}</div>;
+
+  // console.log("profile data:", profile.data && profile.data.profile)
+  // console.log("profile loading:", profileLoading)
+
   return (
     <div>
     <TableContainer component={Paper}>
@@ -105,10 +111,10 @@ export default function Uploads() {
            {data.uploads.map(({ id, filename, mimetype, path }) => (
               <TableRow key={id}>
                 <TableCell>
-                  <Button variant="contained" color="primary" onClick={() => handleProfile(path)}>Profile</Button>
+                  <Button variant="contained" color="primary" onClick={() => getProfile( { variables: { file: filename } })}>Profile</Button>
                 </TableCell>
                 <TableCell>
-                   <Button variant="contained" color="secondary" onClick={() => del( { variables: { path }} )}>Del</Button>
+                   <Button variant="contained" color="secondary" onClick={() => { del( { variables: { path }} ); profile.data = null }}>Del</Button>
                  </TableCell>
                  <TableCell>{filename}</TableCell>
                  <TableCell>{mimetype}</TableCell>
@@ -119,16 +125,12 @@ export default function Uploads() {
        </Table>
       </TableContainer>
        <div>
-         {data.uploads.length > 0
-             ? data.uploads.map(item => {
-                 if (item.correlate) {
-                   // return item.profile[0].path + ":" + item.profile[0].rowCount;
-                   return <Correlate key={item.id} item={item} />
-                 }
-                 if (item.profile) {
-                   return <Profile key={item.id} item={item} />
-                 }
-               })
+         {profile.data && profile.data.profile && profile.data.profile.length > 0 ? 
+               <Profile item={profile.data.profile} />
+                //  if (item.correlate) {
+                //    // return item.profile[0].path + ":" + item.profile[0].rowCount;
+                //    return <Correlate key={item.id} item={item} />
+                //  }
              : 'No profiles to show'}
          </div>
     </div>
