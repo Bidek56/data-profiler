@@ -1,8 +1,16 @@
 import Profile from './Profile'
 import Correlate from './Correlate'
-import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button'
 import { useQuery, useMutation, gql } from "@apollo/client";
+
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 const DEL = gql`
   mutation delete($path: String!) {
@@ -49,11 +57,18 @@ const handleProfile = async path => {
   if (!path) return
 }
 
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+});
+
 export default function Uploads() {
 
   // const { corrData, corrLoading, corrError } = useQuery(GET_CORR);
   // const { profileData, profileLoading, profileError } = useQuery(GET_PROFILE);
 
+  const classes = useStyles();
   const { data, loading, error } = useQuery(GET_UPLOADS);
   const [del] = useMutation(DEL, {
     // Remove from the cache
@@ -75,32 +90,34 @@ export default function Uploads() {
 
   return (
     <div>
-      <Table responsive>
-         <thead>
-            <tr>
-               <th>Profile</th>
-               <th>Del</th>
-               <th>Filename</th>
-               <th>MIME type</th>
-               <th>Path</th>
-             </tr>
-           </thead>
-           <tbody>
+    <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+         <TableHead>
+            <TableRow>
+               <TableCell>Profile</TableCell>
+               <TableCell>Del</TableCell>
+               <TableCell>Filename</TableCell>
+               <TableCell>MIME type</TableCell>
+               <TableCell>Path</TableCell>
+             </TableRow>
+           </TableHead>
+           <TableBody>
            {data.uploads.map(({ id, filename, mimetype, path }) => (
-              <tr key={id}>
-                <td>
-                  <Button variant="primary" onClick={() => handleProfile(path)}>Profile</Button>
-                </td>
-                <td>
-                   <Button variant="danger" onClick={() => del( { variables: { path }} )}>Del</Button>
-                 </td>
-                 <td>{filename}</td>
-                 <td>{mimetype}</td>
-                 <td>{path}</td>
-              </tr>
+              <TableRow key={id}>
+                <TableCell>
+                  <Button variant="contained" color="primary" onClick={() => handleProfile(path)}>Profile</Button>
+                </TableCell>
+                <TableCell>
+                   <Button variant="contained" color="secondary" onClick={() => del( { variables: { path }} )}>Del</Button>
+                 </TableCell>
+                 <TableCell>{filename}</TableCell>
+                 <TableCell>{mimetype}</TableCell>
+                 <TableCell>{path}</TableCell>
+              </TableRow>
            ))}
-           </tbody>
+           </TableBody>
        </Table>
+      </TableContainer>
        <div>
          {data.uploads.length > 0
              ? data.uploads.map(item => {
