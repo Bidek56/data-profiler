@@ -53,7 +53,7 @@ const Container = styled.div`
   transition: border .24s ease-in-out;
 `;
 
-const UploadFile = () => {
+const UploadFile = () : JSX.Element => {
 
   const [uploadFile, { loading, error }] = useMutation(SINGLE_UPLOAD, {
 

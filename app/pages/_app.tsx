@@ -1,3 +1,4 @@
+import type { AppProps /*, AppContext */ } from 'next/app'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client'
 
@@ -9,10 +10,12 @@ const client = new ApolloClient({
   }),
 })
 
-export default function MyApp({ Component, pageProps }) {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ApolloProvider client={client}>
       <Component {...pageProps} />
     </ApolloProvider>
   );
 }
+
+export default MyApp

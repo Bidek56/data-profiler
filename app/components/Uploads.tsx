@@ -63,13 +63,32 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Uploads() {
+interface Upload {
+  id: int;
+  path: string;
+  filename: string;
+  mimetype: string;
+}
+
+interface UploadData {
+  uploads: Upload[];
+}
+
+interface ProfileData {
+  data: any;
+}
+
+interface ProfileVars {
+  file: string;
+}
+
+const Uploads = (): JSX.Element => {
 
   // const { corrData, corrLoading, corrError } = useQuery(GET_CORR);
-  const [ getProfile, profile ] = useLazyQuery(GET_PROFILE);
+  const [ getProfile, profile ] = useLazyQuery<ProfileData, ProfileVars>(GET_PROFILE);
 
   const classes = useStyles();
-  const { data, loading, error } = useQuery(GET_UPLOADS);
+  const { data, loading, error } = useQuery<UploadData>(GET_UPLOADS);
   const [del] = useMutation(DEL, {
     // Remove from the cache
     update(cache, {data: {del}}) {
@@ -96,43 +115,45 @@ export default function Uploads() {
 
   return (
     <div>
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-         <TableHead>
-            <TableRow>
-               <TableCell>Profile</TableCell>
-               <TableCell>Del</TableCell>
-               <TableCell>Filename</TableCell>
-               <TableCell>MIME type</TableCell>
-               <TableCell>Path</TableCell>
-             </TableRow>
-           </TableHead>
-           <TableBody>
-           {data.uploads.map(({ id, filename, mimetype, path }) => (
-              <TableRow key={id}>
-                <TableCell>
-                  <Button variant="contained" color="primary" onClick={() => getProfile( { variables: { file: filename } })}>Profile</Button>
-                </TableCell>
-                <TableCell>
-                   <Button variant="contained" color="secondary" onClick={() => { del( { variables: { path }} ); profile.data = null }}>Del</Button>
-                 </TableCell>
-                 <TableCell>{filename}</TableCell>
-                 <TableCell>{mimetype}</TableCell>
-                 <TableCell>{path}</TableCell>
+      <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+              <TableRow>
+                <TableCell>Profile</TableCell>
+                <TableCell>Del</TableCell>
+                <TableCell>Filename</TableCell>
+                <TableCell>MIME type</TableCell>
+                <TableCell>Path</TableCell>
               </TableRow>
-           ))}
-           </TableBody>
-       </Table>
+            </TableHead>
+            <TableBody>
+            {data.uploads.map(({ id, filename, mimetype, path }) => (
+                <TableRow key={id}>
+                  <TableCell>
+                    <Button variant="contained" color="primary" onClick={() => getProfile( { variables: { file: filename } })}>Profile</Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="contained" color="secondary" onClick={() => { del( { variables: { path }} ); profile.data = null }}>Del</Button>
+                  </TableCell>
+                  <TableCell>{filename}</TableCell>
+                  <TableCell>{mimetype}</TableCell>
+                  <TableCell>{path}</TableCell>
+                </TableRow>
+            ))}
+            </TableBody>
+        </Table>
       </TableContainer>
-       <div>
-         {profile.data && profile.data.profile && profile.data.profile.length > 0 ? 
-               <Profile item={profile.data.profile} />
+      <div>
+        {profile.data && profile.data.profile && profile.data.profile.length > 0 ? 
+              <Profile item={profile.data.profile} />
                 //  if (item.correlate) {
                 //    // return item.profile[0].path + ":" + item.profile[0].rowCount;
                 //    return <Correlate key={item.id} item={item} />
                 //  }
-             : 'No profiles to show'}
-         </div>
+            : 'No profiles to show'}
+        </div>
     </div>
   )
 }
+
+export default Uploads;

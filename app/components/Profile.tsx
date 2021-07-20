@@ -75,7 +75,7 @@ const createChart = data => {
   // chart.scrollbarX = scrollbarX
 }
 
-const Profile = initItem => {
+const Profile = (initItem) : JSX.Element => {
   const [initialized, setInitialized] = useState(false)
   const [item, setItem] = useState(initItem)
 
