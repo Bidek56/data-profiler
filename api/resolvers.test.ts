@@ -33,6 +33,12 @@ const GET_PROFILE = gql`
   }
 `
 
+const COLUMNS = gql`
+  query columns($file: String!) {
+    columns(file: $file)
+  }
+`
+
 const UPLOAD = gql`
   mutation upload($upload: Upload!) {
     singleUpload(file: $upload) {
@@ -65,7 +71,7 @@ beforeAll(async () => {
   })
 })
 
-it('test bad file delete', async () => {
+it.skip('test bad file delete', async () => {
   let res = await server.executeOperation({ query: DELETE, variables: { path: '/does/not/exist' } })
   expect(res?.errors).not.toBeUndefined()
   expect(res?.errors?.length).toBeGreaterThan(0)
@@ -74,7 +80,7 @@ it('test bad file delete', async () => {
   expect(res?.errors?.[0].message).toEqual('File not found')
 })
 
-it('test file upload', async () => {
+it.skip('test file upload', async () => {
   const test_file = 'financial-sample.xlsx'
 
   let res = await server.executeOperation({ 
@@ -135,4 +141,27 @@ it('test upload list', async () => {
   expect(res.errors).toBeUndefined()
   expect(res.data?.uploads).not.toBeUndefined()
   expect(res.data?.uploads?.length).toBeGreaterThan(0)
+})
+
+it.skip('test profile', async () => {
+
+  console.log('profile test')
+
+  const res = await server.executeOperation({ query: GET_PROFILE, variables: { file: './uploads/xqMHlujUt-financial-sample.csv' } });
+  expect(res?.errors).toBeUndefined();
+  expect(res.data?.profile).not.toBeUndefined();
+  expect(res.data?.profile?.length).toBeGreaterThan(0);
+
+  console.log(res.data?.profile[0])
+})
+
+it('test columns', async () => {
+
+  // console.log('columns test')
+
+  const res = await server.executeOperation({ query: COLUMNS, variables: { file: './uploads/xqMHlujUt-financial-sample.csv' } });
+  expect(res?.errors).toBeUndefined();
+  expect(res.data?.columns).not.toBeUndefined();
+  expect(res.data?.columns?.length).toBeGreaterThan(0);
+  // console.log(res.data)
 })

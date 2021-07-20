@@ -4,6 +4,7 @@ import FileSync from 'lowdb/adapters/FileSync'
 import mkdirp from 'mkdirp'
 import shortid from 'shortid'
 import alasql from 'alasql'
+import parse from 'csv-parse'
 import {UserInputError} from 'apollo-server';
 import { ApolloServerFileUploads } from 'ApolloServerFileUploads';
 
@@ -145,17 +146,61 @@ const processUpload = async (upload:ApolloServerFileUploads.Upload): Promise<Apo
 
 export type Maybe<T> = T | null
 
-const processProfile = async (file: string): Promise<any[]> => {
-  let res = await alasql.promise(
-    `select Segment as att1, Country as att2, SUM(Sales) as val from xlsx('${file}') group by Segment,Country`
-  )
+const processCsv = async (file: string): Promise<any[]> => {
+  let records = []
+  const parser = fs
+  .createReadStream(file)
+  .pipe(parse({
+    // CSV options if any
+    columns: true
+  }));
+  // console.log(parser);
+  for await (const record of parser) {
+    // Work with each record
+    records.push(record)
+  }
+  return records
+}
 
-  return res[Symbol.iterator]()
+const processProfile = async (file: string): Promise<any[]> => {
+
+  if (file.endsWith('.xlsx')) {
+    let res = await alasql.promise(
+      `select Segment as att1, Country as att2, SUM(Sales) as val from xlsx('${file}') group by Segment,Country`
+    )
+    return res[Symbol.iterator]()
+  } else if (file.endsWith('.csv')) {
+    // console.log(file);
+
+    const ret = processCsv(file);
+
+    // const ret: any[] = [];
+    return ret;
+  }
+  else
+    throw new UserInputError('Uknown file type', { invalidArgs: file })
+}
+
+const getColumns = async (file: string): Promise<string[]> => {
+  if (file.endsWith('.csv')) {
+    // console.log(file);
+
+    const ret2 = await processCsv(file);
+    if (ret2.length > 0) {
+      const keys = Object.keys(ret2[0]);
+      // console.log(keys)
+      return keys; // return list of columns
+    } else
+      throw new UserInputError('Error parsing', { invalidArgs: file })  
+  }
+  else
+    throw new UserInputError('Uknown file type', { invalidArgs: file })
 }
 
 export const Query = {
   uploads: () => db.get('uploads').value(),
   profile: (obj: any, { file }: { file: string }) => processProfile(file),
+  columns: (obj: any, { file }: { file: string }) => getColumns(file),
   correlate: (obj: any, file: string) => processCorr(file)
 }
 

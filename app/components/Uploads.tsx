@@ -52,6 +52,12 @@ const GET_PROFILE = gql`
   }
 `
 
+const COLUMNS = gql`
+  query columns($file: String!) {
+    columns(file: $file)
+  }
+`
+
 const handleProfile = async path => {
   console.log("Profile path: ", path)
   if (!path) return
@@ -86,6 +92,7 @@ const Uploads = (): JSX.Element => {
 
   // const { corrData, corrLoading, corrError } = useQuery(GET_CORR);
   const [ getProfile, profile ] = useLazyQuery<ProfileData, ProfileVars>(GET_PROFILE);
+  const [ getColumns, columns ] = useLazyQuery(COLUMNS);
 
   const classes = useStyles();
   const { data, loading, error } = useQuery<UploadData>(GET_UPLOADS);
@@ -112,6 +119,7 @@ const Uploads = (): JSX.Element => {
 
   // console.log("profile data:", profile.data && profile.data.profile)
   // console.log("profile loading:", profileLoading)
+  // console.log("Columns:", columns.data.columns)
 
   return (
     <div>
@@ -119,6 +127,7 @@ const Uploads = (): JSX.Element => {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
               <TableRow>
+                <TableCell>Columns</TableCell>
                 <TableCell>Profile</TableCell>
                 <TableCell>Del</TableCell>
                 <TableCell>Filename</TableCell>
@@ -129,6 +138,9 @@ const Uploads = (): JSX.Element => {
             <TableBody>
             {data.uploads.map(({ id, filename, mimetype, path }) => (
                 <TableRow key={id}>
+                  <TableCell>
+                    <Button variant="contained" color="primary" onClick={() => getColumns( { variables: { file: filename } })}>Columns</Button>
+                  </TableCell>
                   <TableCell>
                     <Button variant="contained" color="primary" onClick={() => getProfile( { variables: { file: filename } })}>Profile</Button>
                   </TableCell>
@@ -144,6 +156,7 @@ const Uploads = (): JSX.Element => {
         </Table>
       </TableContainer>
       <div>
+        {columns.data && columns.data.columns && columns.data.columns.length > 0 && columns.data.columns }
         {profile.data && profile.data.profile && profile.data.profile.length > 0 ? 
               <Profile item={profile.data.profile} />
                 //  if (item.correlate) {

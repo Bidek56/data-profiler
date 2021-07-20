@@ -32,6 +32,7 @@ type Query {
   uploads: [File]
   profile(file: String!): [Profile]
   correlate(file: String!): [Correlation]
+  columns(file: String!): [String]
 }
 
 type Mutation {
