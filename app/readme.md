@@ -3,7 +3,6 @@
 An example SSR web app using:
 
 - [`next`](https://npm.im/next)
-- [`react-apollo`](https://npm.im/react-apollo)
 - [`apollo-upload-client`](https://npm.im/apollo-upload-client)
 
 ## Setup
@@ -12,6 +11,10 @@ An example SSR web app using:
 2.  Duplicate `.env.example` as `.env` and configure.
 3.  Run `npm install --legacy-peer-deps` in the `app` directory with Terminal.
 4.  Run `npm run dev` for development, or `npm run build && npm start` for production.
+
+## App
+App is listening on http://localhost:3000/  
+GraphQL is listening on http://localhost:3001/graphql   
 
 Ensure your editor supports:
 
