@@ -26,3 +26,8 @@ Ensure your editor supports:
 ## Support
 
 See `package.json` `engines` and `browserslist`.
+
+## Node 17 error
+[webpack-cli] Error: error:0308010C:digital envelope routines::unsupported
+
+`export NODE_OPTIONS=--openssl-legacy-provider`
