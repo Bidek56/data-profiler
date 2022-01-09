@@ -1,6 +1,6 @@
-import { ApolloServer, gql } from 'apollo-server'
-import * as resolvers from './resolvers'
-import fs from 'fs'
+import { ApolloServer, gql } from 'apollo-server';
+import * as resolvers from './resolvers';
+import fs from 'fs';
 
 const LIST_UPLOADS = gql`
   query uploads {
@@ -80,7 +80,7 @@ it.skip('test bad file delete', async () => {
   expect(res?.errors?.[0].message).toEqual('File not found')
 })
 
-it.skip('test file upload', async () => {
+it('test file upload', async () => {
   const test_file = 'financial-sample.xlsx'
 
   let res = await server.executeOperation({ 
@@ -104,7 +104,7 @@ it.skip('test file upload', async () => {
 
   const path = res?.data?.singleUpload.path
 
-  // console.log('Path:', path)
+  console.log('Path:', path)
 
   // run query against the server and snapshot the output
   res = await server.executeOperation({ query: GET_PROFILE, variables: { file: path } });
@@ -143,11 +143,11 @@ it('test upload list', async () => {
   expect(res.data?.uploads?.length).toBeGreaterThan(0)
 })
 
-it.skip('test profile', async () => {
+it('test profile', async () => {
 
-  console.log('profile test')
+  // console.log('profile test')
 
-  const res = await server.executeOperation({ query: GET_PROFILE, variables: { file: './uploads/xqMHlujUt-financial-sample.csv' } });
+  const res = await server.executeOperation({ query: GET_PROFILE, variables: { file: './financial-sample.csv' } });
   expect(res?.errors).toBeUndefined();
   expect(res.data?.profile).not.toBeUndefined();
   expect(res.data?.profile?.length).toBeGreaterThan(0);
@@ -159,7 +159,7 @@ it('test columns', async () => {
 
   // console.log('columns test')
 
-  const res = await server.executeOperation({ query: COLUMNS, variables: { file: './uploads/xqMHlujUt-financial-sample.csv' } });
+  const res = await server.executeOperation({ query: COLUMNS, variables: { file: './financial-sample.csv' } });
   expect(res?.errors).toBeUndefined();
   expect(res.data?.columns).not.toBeUndefined();
   expect(res.data?.columns?.length).toBeGreaterThan(0);
