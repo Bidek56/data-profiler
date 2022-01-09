@@ -4,7 +4,7 @@ import FileSync from 'lowdb/adapters/FileSync'
 import mkdirp from 'mkdirp'
 import shortid from 'shortid'
 import alasql from 'alasql'
-import parse from 'csv-parse'
+import { parse } from 'csv-parse'
 import {UserInputError} from 'apollo-server';
 import { ApolloServerFileUploads } from 'ApolloServerFileUploads';
 
@@ -147,13 +147,17 @@ const processUpload = async (upload:ApolloServerFileUploads.Upload): Promise<Apo
 export type Maybe<T> = T | null
 
 const processCsv = async (file: string): Promise<any[]> => {
+
+  const csv_parser = parse({
+    delimiter: ',',
+    columns: true
+  });
+
   let records = []
   const parser = fs
   .createReadStream(file)
-  .pipe(parse({
-    // CSV options if any
-    columns: true
-  }));
+  .pipe(csv_parser);
+
   // console.log(parser);
   for await (const record of parser) {
     // Work with each record
@@ -170,7 +174,7 @@ const processProfile = async (file: string): Promise<any[]> => {
     )
     return res[Symbol.iterator]()
   } else if (file.endsWith('.csv')) {
-    // console.log(file);
+    // console.log("CSV:", file);
 
     const ret = processCsv(file);
 
