@@ -89,3 +89,4 @@ app/components/card.js
 api/package-lock.json
 app/package-lock.json
 try/*
+.DS_Store

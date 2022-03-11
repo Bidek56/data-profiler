@@ -2,15 +2,8 @@ import Profile from './Profile'
 import Correlate from './Correlate'
 import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
 
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from '@mui/styles';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 
 const DEL = gql`
   mutation delete($path: String!) {
