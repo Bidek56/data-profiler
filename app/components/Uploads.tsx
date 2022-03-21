@@ -1,5 +1,5 @@
 import Profile from './Profile'
-import Correlate from './Correlate'
+// import Correlate from './Correlate'
 import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
 
 import { makeStyles } from '@mui/styles';
@@ -63,7 +63,7 @@ const useStyles = makeStyles({
 });
 
 interface Upload {
-  id: int;
+  id: number;
   path: string;
   filename: string;
   mimetype: string;
@@ -74,7 +74,9 @@ interface UploadData {
 }
 
 interface ProfileData {
-  data: any;
+    profile: {
+      att1: string, att2: string, val: number;
+    }[]
 }
 
 interface ProfileVars {
@@ -110,7 +112,7 @@ const Uploads = (): JSX.Element => {
   if (profile.loading) return <div suppressHydrationWarning={true}><p>Loading Profile.....</p></div>;
   if (profile.error) return <div suppressHydrationWarning={true}>{JSON.stringify(profile.error, null, 2)}</div>;
 
-  // console.log("profile data:", profile.data && profile.data.profile)
+  // console.log("profile data2:",profile.data && profile.data.profile)
   // console.log("profile loading:", profileLoading)
   // console.log("Columns:", columns.data.columns)
 
@@ -150,7 +152,7 @@ const Uploads = (): JSX.Element => {
       </TableContainer>
       <div>
         {columns.data && columns.data.columns && columns.data.columns.length > 0 && columns.data.columns }
-        {profile.data && profile.data.profile && profile.data.profile.length > 0 ? 
+        {profile.data && profile.data && profile.data.profile.length > 0 ? 
               <Profile item={profile.data.profile} />
                 //  if (item.correlate) {
                 //    // return item.profile[0].path + ":" + item.profile[0].rowCount;

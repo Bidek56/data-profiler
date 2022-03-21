@@ -1,14 +1,14 @@
 // Declaring type of props - see "Typing Component Props" for more examples
 type AppProps = {
-  heading: string;
+  heading?: string;
   children: JSX.Element;
-  className: string;
+  className?: string;
 }; // use `interface` if exporting so that consumers can extend
 
 
 const Section = ({ heading, children, className }: AppProps) : JSX.Element => (
   <section className={className}>
-    <h1>{heading}</h1>
+    {heading && <h1>{heading}</h1>}
     {children}
     <style jsx>{`
       h1 {

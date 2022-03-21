@@ -3,7 +3,7 @@ import Head from 'next/head'
 // Declaring type of props - see "Typing Component Props" for more examples
 type AppProps = {
   title: string;
-  children: JSX.Element
+  children: JSX.Element[]
 }; // use `interface` if exporting so that consumers can extend
 
 const Page = ({ title, children }: AppProps): JSX.Element => (

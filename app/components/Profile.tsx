@@ -80,7 +80,7 @@ const Profile = (initItem) : JSX.Element => {
   const [item, setItem] = useState(initItem)
 
   useEffect(() => {
-    console.log(initialized ? 'component did update' : 'component did init')
+    // console.log(initialized ? 'component did update' : 'component did init')
     if (!initialized) {
       createChart(initItem)
       setInitialized(true)
