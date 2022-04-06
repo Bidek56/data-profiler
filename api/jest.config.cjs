@@ -80,12 +80,7 @@ module.exports = {
   // An array of file extensions your modules use
   moduleFileExtensions: [
     'js',
-    'mjs',
-    //   "json",
-    'jsx',
     'ts'
-    //   "tsx",
-    //   "node"
   ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module

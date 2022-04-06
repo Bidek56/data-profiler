@@ -2,6 +2,7 @@
   "name": "data-profiler-api",
   "private": true,
   "license": "MIT",
+  "type": "module",
   "repository": {
     "url": "https://github.com/Bidek56/data-profiler.git"
   },
@@ -29,12 +30,12 @@
     "@types/mkdirp": "^1.0.2",
     "@types/shortid": "^0.0.29",
     "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
     "ts-jest": "^27.1.4",
-    "ts-node-dev": "^2.0.0-0",
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "start": "ts-node-dev --respawn server.ts",
+    "dev": "node --experimental-specifier-resolution=node --experimental-modules --no-warnings --loader ts-node/esm server.ts",
     "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll"
   }

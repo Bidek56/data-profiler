@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2022",
-
-
+    "module": "es2022",
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
@@ -18,14 +17,16 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "baseUrl": "."
+    "experimentalDecorators": true
   },
-  "exclude": [ "dist", "node_modules" ],
-  "include": [ "./*.ts" ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "include": [
+    "./*.ts"
+  ],
   "parserOptions": {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
