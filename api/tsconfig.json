@@ -1,13 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "jsx": "react",
-    "lib": [
-      "dom",
-      "es6",
-      "es2020",
-      "esnext.asynciterable"
-    ],
+    "target": "es2022",
+
+
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
@@ -27,16 +22,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
-    "rootDir": "src"
+    "baseUrl": "."
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "./src/**/*.tsx",
-    "./src/**/*.ts"
-  ],
+  "exclude": [ "dist", "node_modules" ],
+  "include": [ "./*.ts" ],
   "parserOptions": {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {

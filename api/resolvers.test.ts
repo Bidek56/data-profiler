@@ -63,7 +63,7 @@ let server: ApolloServer;
 
 beforeAll(async () => {
   const typeDefs = gql(fs.readFileSync('./typeDefs.graphql', "utf-8"))
-  
+
   // create a test server to test against, using our production typeDefs, resolvers, and dataSources.
   server = new ApolloServer({
     typeDefs,
@@ -83,19 +83,21 @@ it.skip('test bad file delete', async () => {
 it('test file upload', async () => {
   const test_file = 'financial-sample.xlsx'
 
-  let res = await server.executeOperation({ 
+  let res = await server.executeOperation({
     query: UPLOAD,
-      variables: {
-        upload: {
-          file: {
-            createReadStream: () => fs.createReadStream(test_file),
-            filename: test_file,
-            mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            encoding: '7bit'
-          }
+    variables: {
+      upload: {
+        file: {
+          createReadStream: () => fs.createReadStream(test_file),
+          filename: test_file,
+          mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          encoding: '7bit'
         }
-      } } );
-    // console.log('Upload res:', res)
+      }
+    }
+  });
+
+  res?.errors && console.error('Error:', res.errors)
 
   expect(res.errors).toBeUndefined()
   expect(res?.data?.singleUpload).not.toBeUndefined()
@@ -104,11 +106,11 @@ it('test file upload', async () => {
 
   const path = res?.data?.singleUpload.path
 
-  console.log('Path:', path)
+  // console.log('Path:', path)
 
   // run query against the server and snapshot the output
   res = await server.executeOperation({ query: GET_PROFILE, variables: { file: path } });
-  
+
   // console.log('Profile res:', res.data?.profile)
   expect(res.data).not.toBeUndefined()
   expect(res.data?.profile).not.toBeUndefined()
@@ -129,13 +131,13 @@ it('test file upload', async () => {
   expect(res.errors).toBeUndefined()
   expect(res.data?.delete).not.toBeUndefined()
   expect(res.data?.delete?.id).not.toBeUndefined()
-  expect(res.data?.delete?.path).toEqual(path) 
+  expect(res.data?.delete?.path).toEqual(path)
 })
 
 it('test upload list', async () => {
   // run query against the server and snapshot the output
   const res = await server.executeOperation({ query: LIST_UPLOADS });
-  
+
   // console.log(res.data)
 
   expect(res.errors).toBeUndefined()
@@ -152,7 +154,7 @@ it('test profile', async () => {
   expect(res.data?.profile).not.toBeUndefined();
   expect(res.data?.profile?.length).toBeGreaterThan(0);
 
-  console.log(res.data?.profile[0])
+  // console.log(res.data?.profile[0])
 })
 
 it('test columns', async () => {

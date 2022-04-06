@@ -9,10 +9,11 @@ export namespace ApolloServerFileUploads {
   };
 
   export type UploadedFileResponse = {
+    id: string;
     filename: string;
     mimetype: string;
-    encoding: string;
-    url: string;
+    path: string;
+    encoding?: string;
   };
 
   export type Upload = {

@@ -21,7 +21,7 @@ const main = async () => {
   app.use(graphqlUploadExpress());
   server.applyMiddleware({ app });
 
-  await app.listen({ port: process.env.PORT })
+  app.listen({ port: process.env.PORT })
 
   console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`);
 }

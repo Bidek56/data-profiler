@@ -66,10 +66,16 @@ module.exports = {
   // globalTeardown: null,
 
   // A set of global variables that need to be available in all test environments
-  // globals: {},
+  globals: {
+    'ts-jest': {
+      useESM: true
+    },
+  },
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  moduleDirectories: ['node_modules'],
+  // moduleDirectories: ['node_modules'],
+
+  extensionsToTreatAsEsm: [".ts"],
 
   // An array of file extensions your modules use
   moduleFileExtensions: [
