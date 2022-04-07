@@ -1,16 +1,17 @@
-# Example GraphQL API
+# GraphQL API for data profiler app
 
-An example GraphQL API using:
+GraphQL API
 
-- [`koa`](https://npm.im/koa)
-- [`apollo-server-koa`](https://npm.im/apollo-server-koa), which implements [`graphql-upload`](https://npm.im/graphql-upload)
+- [`apollo-server`](https://npm.im/apollo-server) 
+- [`apollo-server-express`](https://npm.im/apollo-server-express) 
+- [`graphql-upload`](https://npm.im/graphql-upload) 
 
-## Setup
-
+Setup
 1.  Install the latest [Node.js](https://nodejs.org) and [npm](https://npmjs.com).
 2.  Duplicate `.env.example` as `.env` and configure.
 3.  Run `npm install` in the `api` directory with Terminal.
-4.  Run `npm run dev` for development, or `npm run start` for production.
+4.  Run `npm run dev` for development.
+5.  Run `npm run test` for tests.
 
 Ensure your editor supports:
 
@@ -19,6 +20,6 @@ Ensure your editor supports:
   - [Atom](https://atom.io): [`linter-eslint`](https://atom.io/packages/linter-eslint).
   - [VS Code](https://code.visualstudio.com): [`vscode-eslint`](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
-## Support
+Support 
 
-See `package.json` `engines`.
+- Engines "node": ">=17.0"
