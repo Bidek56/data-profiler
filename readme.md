@@ -6,3 +6,6 @@ A full stack demo of file uploads via GraphQL mutations using [GraphQL multipart
 
 - [Example GraphQL API](api) using [Apollo Server](https://apollographql.com/server).
 - [Example web app](app) using [apollo-upload-client](https://github.com/jaydenseric/apollo-upload-client).
+
+
+To install MUI with React 18, please `npm i --legacy-peer-deps` until MUI fixes it's support for React 18

@@ -7,11 +7,10 @@
     "url": "https://github.com/Bidek56/data-profiler.git"
   },
   "author": {
-    "name": "Darek",
-    "email": "darke.bidek@gmail.com"
+    "name": "Darek"
   },
   "engines": {
-    "node": ">=17.0"
+    "node": ">=18.0"
   },
   "dependencies": {
     "alasql": "^1.7.3",
@@ -20,7 +19,7 @@
     "csv-parse": "^5.1.0",
     "dotenv": "^16.0.1",
     "graphql": "^16.5.0",
-    "graphql-upload": "^15.0.0",
+    "graphql-upload": "^15.0.1",
     "shortid": "^2.2.16",
     "xlsx": "^0.18.5"
   },
