@@ -142,7 +142,7 @@ it('test upload list', async () => {
 
   expect(res.errors).toBeUndefined()
   expect(res.data?.uploads).not.toBeUndefined()
-  expect(res.data?.uploads?.length).toBeGreaterThan(0)
+  expect(res.data?.uploads?.length).toBeGreaterThanOrEqual(0)
 })
 
 it('test profile', async () => {
