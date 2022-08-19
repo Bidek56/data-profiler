@@ -4,7 +4,7 @@ import { ApolloServer, gql } from 'apollo-server-express'
 import * as resolvers from './resolvers'
 import dotenv from 'dotenv'
 
-import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 
 const main = async () => {
 
