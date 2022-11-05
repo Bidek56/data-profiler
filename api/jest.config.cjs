@@ -66,11 +66,11 @@ module.exports = {
   // globalTeardown: null,
 
   // A set of global variables that need to be available in all test environments
-  globals: {
-    'ts-jest': {
-      useESM: true
-    },
-  },
+  // globals: {
+  //   'ts-jest': {
+  //     useESM: true
+  //   },
+  // },
 
   // An array of directory names to be searched recursively up from the requiring module's location
   // moduleDirectories: ['node_modules'],
@@ -78,10 +78,7 @@ module.exports = {
   extensionsToTreatAsEsm: [".ts"],
 
   // An array of file extensions your modules use
-  moduleFileExtensions: [
-    'js',
-    'ts'
-  ],
+  moduleFileExtensions: [ 'js', 'ts' ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
@@ -96,7 +93,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  preset: 'ts-jest',
+  // preset: 'ts-jest',
 
   // Run tests from one or more projects
   // projects: null,
@@ -170,7 +167,8 @@ module.exports = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.js$': 'babel-jest'
+    '^.+\\.js$': 'babel-jest',
+    '^.+\\.ts$': ['ts-jest', { useESM: true }]
   }
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
