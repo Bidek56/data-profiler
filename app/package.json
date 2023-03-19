@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.11.13",
     "@mui/styles": "^5.11.13",
+    "apollo-link-context": "^1.0.20",
     "apollo-upload-client": "^17.0.0",
     "cross-fetch": "^3.1.5",
     "dotenv-cli": "^7.1.0",
@@ -31,6 +32,7 @@
     "styled-components": "^5.3.9"
   },
   "devDependencies": {
+    "@types/apollo-upload-client": "^17.0.2",
     "@types/expect-puppeteer": "^5.0.3",
     "@types/jest-environment-puppeteer": "^5.0.3",
     "@types/react": "^18.0.28",

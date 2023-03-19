@@ -75,7 +75,7 @@ const UploadFile = () : JSX.Element => {
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
     // Do something with the files
     acceptedFiles.forEach((file: FileWithPath) => {
-      console.log("Accepted:", file)
+      // console.log("Accepted:", file)
       uploadFile({ variables: { file } });
     })
   }, [])
