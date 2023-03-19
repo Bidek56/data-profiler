@@ -1,6 +1,8 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { gql } from 'apollo-server-express'
+import { ApolloServer } from '@apollo/server';
 import * as resolvers from './resolvers';
 import fs from 'fs';
+import { describe, beforeAll, expect, it } from "vitest";
 
 const LIST_UPLOADS = gql`
   query uploads {
@@ -59,111 +61,122 @@ const DELETE = gql`
   }
 `
 
-let server: ApolloServer;
+describe('Apollo server tests', () => {
 
-beforeAll(async () => {
-  const typeDefs = gql(fs.readFileSync('./typeDefs.graphql', "utf-8"))
+  let server: ApolloServer;
 
-  // create a test server to test against, using our production typeDefs, resolvers, and dataSources.
-  server = new ApolloServer({
-    typeDefs,
-    resolvers
+  beforeAll(async () => {
+    const typeDefs = gql(fs.readFileSync('./typeDefs.graphql', "utf-8"))
+
+    // create a test server to test against, using our production typeDefs, resolvers, and dataSources.
+    server = new ApolloServer({
+      typeDefs,
+      resolvers
+    })
   })
-})
 
-it.skip('test bad file delete', async () => {
-  let res = await server.executeOperation({ query: DELETE, variables: { path: '/does/not/exist' } })
-  expect(res?.errors).not.toBeUndefined()
-  expect(res?.errors?.length).toBeGreaterThan(0)
-  expect(res?.errors?.[0].message).not.toBeUndefined()
-  expect(res?.errors?.[0].message).not.toBeUndefined()
-  expect(res?.errors?.[0].message).toEqual('File not found')
-})
+  it('test bad file delete', async () => {
+    let res = await server.executeOperation({ query: DELETE, variables: { path: '/does/not/exist' } })
 
-it('test file upload', async () => {
-  const test_file = 'financial-sample.xlsx'
+    expect(res?.body.kind === "single").toBeTruthy();
+    expect(res?.body.singleResult.errors).not.toBeUndefined()
+    expect(res?.body.singleResult.errors?.length).toBeGreaterThan(0)
+    expect(res?.body.singleResult.errors?.[0].message).not.toBeUndefined()
+    expect(res?.body.singleResult.errors?.[0].message).not.toBeUndefined()
+    expect(res?.body.singleResult.errors?.[0].message).toEqual('File not found')
+  })
 
-  let res = await server.executeOperation({
-    query: UPLOAD,
-    variables: {
-      upload: {
-        file: {
-          createReadStream: () => fs.createReadStream(test_file),
-          filename: test_file,
-          mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          encoding: '7bit'
+  it('test file upload', async () => {
+    const test_file = 'financial-sample.xlsx'
+
+    let res = await server.executeOperation({
+      query: UPLOAD,
+      variables: {
+        upload: {
+          file: {
+            createReadStream: () => fs.createReadStream(test_file),
+            filename: test_file,
+            mimetype: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            encoding: '7bit'
+          }
         }
       }
-    }
-  });
+    });
 
-  res?.errors && console.error('Error:', res.errors)
+    let single = res?.body.singleResult
 
-  expect(res.errors).toBeUndefined()
-  expect(res?.data?.singleUpload).not.toBeUndefined()
-  expect(res?.data?.singleUpload.id).not.toBeUndefined()
-  expect(res?.data?.singleUpload.filename).toEqual(test_file)
+    // console.log("Sing:", single);
 
-  const path = res?.data?.singleUpload.path
+    single?.errors && console.error('Error:', single.errors)
 
-  // console.log('Path:', path)
+    expect(single.errors).toBeUndefined();
+    expect(single).not.toBeUndefined()
+    expect(single?.data).not.toBeUndefined()
+    expect(single?.data.singleUpload.id).not.toBeUndefined()
+    expect(single?.data.singleUpload.filename).toEqual(test_file)
 
-  // run query against the server and snapshot the output
-  res = await server.executeOperation({ query: GET_PROFILE, variables: { file: path } });
+    const path = single?.data.singleUpload.path
 
-  // console.log('Profile res:', res.data?.profile)
-  expect(res.data).not.toBeUndefined()
-  expect(res.data?.profile).not.toBeUndefined()
-  expect(res.data?.profile.length).toEqual(25)
+    // // console.log('Path:', path)
 
-  res = await server.executeOperation({ query: GET_CORRELATION, variables: { file: path } });
+    // run query against the server and snapshot the output
+    res = await server.executeOperation({ query: GET_PROFILE, variables: { file: path } });
 
-  // console.log('Corr', res.data)
+    expect(res?.body.kind === "single").toBeTruthy();
 
-  expect(res.errors).toBeUndefined()
-  expect(res.data?.correlate).not.toBeUndefined()
-  expect(res.data?.correlate.length).toBeGreaterThan(0)
+    single = res?.body.singleResult
 
-  res = await server.executeOperation({ query: DELETE, variables: { path } });
+    expect(single.data).not.toBeUndefined()
+    expect(single.data?.profile).not.toBeUndefined()
+    expect(single.data?.profile.length).toEqual(25)
 
-  // console.log('Del res:', res)
+    res = await server.executeOperation({ query: GET_CORRELATION, variables: { file: path } });
 
-  expect(res.errors).toBeUndefined()
-  expect(res.data?.delete).not.toBeUndefined()
-  expect(res.data?.delete?.id).not.toBeUndefined()
-  expect(res.data?.delete?.path).toEqual(path)
-})
+    // // console.log('Corr', res.data)
 
-it('test upload list', async () => {
-  // run query against the server and snapshot the output
-  const res = await server.executeOperation({ query: LIST_UPLOADS });
+    single = res?.body.singleResult
+    expect(single.errors).toBeUndefined()
+    expect(single.data?.correlate).not.toBeUndefined()
+    expect(single.data?.correlate.length).toBeGreaterThan(0)
 
-  // console.log(res.data)
+    res = await server.executeOperation({ query: DELETE, variables: { path } });
+    single = res?.body.singleResult
 
-  expect(res.errors).toBeUndefined()
-  expect(res.data?.uploads).not.toBeUndefined()
-  expect(res.data?.uploads?.length).toBeGreaterThanOrEqual(0)
-})
+    // console.log('Del res:', res)
 
-it('test profile', async () => {
+    expect(single.errors).toBeUndefined()
+    expect(single.data?.delete).not.toBeUndefined()
+    expect(single.data?.delete?.id).not.toBeUndefined()
+    expect(single.data?.delete?.path).toEqual(path)
+  })
 
-  // console.log('profile test')
+  it('test upload list', async () => {
+    // run query against the server and snapshot the output
+    const res = await server.executeOperation({ query: LIST_UPLOADS });
 
-  const res = await server.executeOperation({ query: GET_PROFILE, variables: { file: './financial-sample.csv' } });
-  expect(res?.errors).toBeUndefined();
-  expect(res.data?.profile).not.toBeUndefined();
-  expect(res.data?.profile?.length).toBeGreaterThan(0);
+    // console.log(res?.body.singleResult)
 
-  // console.log(res.data?.profile[0])
-})
+    expect(res?.body.singleResult.errors).toBeUndefined();
+    expect(res?.body.singleResult.data?.uploads).not.toBeUndefined()
+    expect(res?.body.singleResult.data?.uploads?.length).toBeGreaterThanOrEqual(0)
+  })
 
-it('test columns', async () => {
+  it('test profile', async () => {
 
-  // console.log('columns test')
+    // console.log('profile test')
+    const res = await server.executeOperation({ query: GET_PROFILE, variables: { file: './financial-sample.csv' } });
 
-  const res = await server.executeOperation({ query: COLUMNS, variables: { file: './financial-sample.csv' } });
-  expect(res?.errors).toBeUndefined();
-  expect(res.data?.columns).not.toBeUndefined();
-  expect(res.data?.columns?.length).toBeGreaterThan(0);
-  // console.log(res.data)
+    // console.log("Res:", res?.body.singleResult)
+
+    expect(res?.body.singleResult.errors).toBeUndefined();
+    expect(res?.body.singleResult.data?.profile).not.toBeUndefined();
+    expect(res?.body.singleResult.data?.profile?.length).toBeGreaterThan(0);
+  })
+
+  it('test columns', async () => {
+    const res = await server.executeOperation({ query: COLUMNS, variables: { file: './financial-sample.csv' } });
+    expect(res?.body.singleResult.errors).toBeUndefined();
+    expect(res?.body.singleResult.data?.columns).not.toBeUndefined();
+    expect(res?.body.singleResult.data?.columns?.length).toBeGreaterThan(0);
+  })
 })

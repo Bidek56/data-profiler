@@ -4,7 +4,7 @@ import shortid from 'shortid'
 import mkdirp from 'mkdirp'
 import alasql from 'alasql'
 import { parse } from 'csv-parse'
-import { UserInputError } from 'apollo-server';
+import { GraphQLError } from 'graphql';
 import { ApolloServerFileUploads } from './ApolloServerFileUploads';
 import { initJSONDatabase } from './db'
 
@@ -79,9 +79,11 @@ const deleteDB = async (path: string) => {
 
 const processDelete = async (path: string) => {
     fs.unlink(path, err => {
-        if (err && err.code == 'ENOENT') new UserInputError('File not found', { invalidArgs: path })
+        if (err && err.code == 'ENOENT') 
+            new GraphQLError('Uknown file type', { extensions: { code: 'BAD_USER_INPUT' }} )
         // console.error(`File ${path} not found`)
-        else if (err) new UserInputError('Error occurred while trying to remove file', { invalidArgs: path })
+        else if (err) 
+            new GraphQLError('Error occurred while trying to remove file', { extensions: { code: 'BAD_USER_INPUT' }} )
         // else console.log(`File ${path} was removed`)
     })
     const res = await deleteDB(path)
@@ -90,7 +92,7 @@ const processDelete = async (path: string) => {
 
     if (res?.length) return res[0]
     else
-        throw new UserInputError('File not found', { invalidArgs: path })
+        return new GraphQLError('File not found', { extensions: { code: 'BAD_USER_INPUT' }} )
 }
 
 const randomIntFromInterval = (min: number, max: number) => { // min and max included 
@@ -150,7 +152,7 @@ const processUpload = async (upload: ApolloServerFileUploads.Upload): Promise<Ap
     const { createReadStream, filename, mimetype } = file
 
     if (!createReadStream)
-        throw new UserInputError('Null read stream', { invalidArgs: filename })
+        throw new GraphQLError('Null read stream', { extensions: { code: 'BAD_USER_INPUT' }} )
 
     const stream: fs.ReadStream = <fs.ReadStream>createReadStream()
     const returned: StoreConfig = await storeFS({
@@ -201,7 +203,7 @@ const processProfile = async (file: string): Promise<any[]> => {
       return ret;
     }
     else
-      throw new UserInputError('Uknown file type', { invalidArgs: file })
+      throw new GraphQLError('Uknown file type', { extensions: { code: 'BAD_USER_INPUT' }} )
   }
   
   const getColumns = async (file: string): Promise<string[]> => {
@@ -214,10 +216,10 @@ const processProfile = async (file: string): Promise<any[]> => {
         // console.log(keys)
         return keys; // return list of columns
       } else
-        throw new UserInputError('Error parsing', { invalidArgs: file })  
+        throw new GraphQLError('Error parsing', { extensions: { code: 'BAD_USER_INPUT' }} )
     }
     else
-      throw new UserInputError('Uknown file type', { invalidArgs: file })
+      throw new GraphQLError('Uknown file type', { extensions: { code: 'BAD_USER_INPUT' }} )
   }
   
   export const Query = {
