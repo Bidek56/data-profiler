@@ -11,11 +11,6 @@ import bodyParser from 'body-parser';
 import * as resolvers from './resolvers'
 import dotenv from 'dotenv'
 
-// import dotenv from 'dotenv'
-
-// import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
-
-
 interface MyContext {
   token?: String;
 }
@@ -38,7 +33,7 @@ const main = async () => {
   // and our expressMiddleware function.
   app.use(
     '/graphql',
-    cors<cors.CorsRequest>(),
+    cors<cors.CorsRequest>({ origin: [`http://localhost:3000`, 'https://studio.apollographql.com'] }),
     bodyParser.json(),
     // expressMiddleware accepts the same arguments:
     // an Apollo Server instance and optional configuration options

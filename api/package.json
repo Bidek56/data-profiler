@@ -24,7 +24,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/graphql-upload": "^8.0.12",
+    "@types/graphql-upload": "^16.0.0",
     "@types/mkdirp": "^2.0.0",
     "@types/shortid": "^0.0.29",
     "mkdirp": "^2.1.5",

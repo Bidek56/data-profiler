@@ -1,6 +1,6 @@
 import { useMutation, gql } from "@apollo/client";
 import React, {useCallback} from 'react'
-import {useDropzone} from 'react-dropzone'
+import {useDropzone, FileWithPath} from 'react-dropzone'
 import styled from 'styled-components';
 
 const SINGLE_UPLOAD = gql`
@@ -59,19 +59,23 @@ const UploadFile = () : JSX.Element => {
 
     // update the cache
     update( cache, { data: {singleUpload}}) {
-      const {uploads} = cache.readQuery( { query: GET_UPLOADS } );
+      const uploads = cache.readQuery( { query: GET_UPLOADS } );
 
-      cache.writeQuery({
-        query: GET_UPLOADS,
-        data: { uploads: uploads.concat([singleUpload]) },
-      });
+      console.log("Up:", uploads);
+
+      // uploads
+
+      // cache.writeQuery({
+      //   query: GET_UPLOADS,
+      //   data: { uploads: uploads.concat([singleUpload]) },
+      // });
     }   
   });
 
-  const onDrop = useCallback(acceptedFiles => {
+  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
     // Do something with the files
-    acceptedFiles.forEach((file) => {
-      // console.log("Accepted:", file)
+    acceptedFiles.forEach((file: FileWithPath) => {
+      console.log("Accepted:", file)
       uploadFile({ variables: { file } });
     })
   }, [])

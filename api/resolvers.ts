@@ -204,33 +204,32 @@ const processProfile = async (file: string): Promise<any[]> => {
     }
     else
       throw new GraphQLError('Uknown file type', { extensions: { code: 'BAD_USER_INPUT' }} )
-  }
-  
-  const getColumns = async (file: string): Promise<string[]> => {
+}
+
+const getColumns = async (file: string): Promise<string[]> => {
     if (file.endsWith('.csv')) {
-      // console.log(file);
-  
-      const ret2 = await processCsv(file);
-      if (ret2.length > 0) {
+        // console.log(file);
+
+        const ret2 = await processCsv(file);
+        if (ret2.length > 0) {
         const keys = Object.keys(ret2[0]);
         // console.log(keys)
         return keys; // return list of columns
-      } else
+        } else
         throw new GraphQLError('Error parsing', { extensions: { code: 'BAD_USER_INPUT' }} )
     }
     else
-      throw new GraphQLError('Uknown file type', { extensions: { code: 'BAD_USER_INPUT' }} )
-  }
+        throw new GraphQLError('Uknown file type', { extensions: { code: 'BAD_USER_INPUT' }} )
+}
   
-  export const Query = {
+export const Query = {
     uploads: () => data.uploads,
     profile: (obj: any, { file }: { file: string }) => processProfile(file),
     columns: (obj: any, { file }: { file: string }) => getColumns(file),
     correlate: (obj: any, file: string) => processCorr(file)
-  }
+}
   
-  export const Mutation = {
+export const Mutation = {
     singleUpload: (parent: any, { file }: { file: ApolloServerFileUploads.Upload }): Promise<ApolloServerFileUploads.UploadedFileResponse> => processUpload(file),
     delete: (obj: any, { path }: { path: string }) => processDelete(path)
-  }
-  
+}
