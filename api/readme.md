@@ -3,7 +3,6 @@
 GraphQL API
 
 - [`apollo-server`](https://npm.im/apollo-server) 
-- [`apollo-server-express`](https://npm.im/apollo-server-express) 
 - [`graphql-upload`](https://npm.im/graphql-upload) 
 
 Setup

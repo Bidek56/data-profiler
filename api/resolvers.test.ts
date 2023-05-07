@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express'
+import gql from 'graphql-tag';
 import { ApolloServer } from '@apollo/server';
 import * as resolvers from './resolvers';
 import fs from 'fs';

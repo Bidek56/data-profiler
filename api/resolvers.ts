@@ -1,7 +1,7 @@
 
 import fs from 'fs'
 import shortid from 'shortid'
-import mkdirp from 'mkdirp'
+import { mkdirp } from 'mkdirp'
 import alasql from 'alasql'
 import { parse } from 'csv-parse'
 import { GraphQLError } from 'graphql';
