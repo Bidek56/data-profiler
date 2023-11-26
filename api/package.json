@@ -10,28 +10,28 @@
     "name": "Darek"
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.8"
   },
   "dependencies": {
-    "@apollo/server": "^4.9.3",
-    "alasql": "^4.1.4",
-    "csv-parse": "^5.5.0",
+    "@apollo/server": "^4.9.5",
+    "alasql": "^4.2.2",
+    "csv-parse": "^5.5.2",
     "dotenv": "^16.3.1",
-    "graphql": "^16.8.0",
+    "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "graphql-upload": "^16.0.2",
     "shortid": "^2.2.16",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.13",
-    "@types/graphql-upload": "^16.0.1",
-    "@types/shortid": "^0.0.29",
+    "@types/cors": "^2.8.17",
+    "@types/graphql-upload": "^16.0.5",
+    "@types/shortid": "^0.0.32",
     "mkdirp": "^3.0.1",
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2",
-    "vitest": "^0.34.3"
+    "typescript": "^5.3.2",
+    "vitest": "^0.34.6"
   },
   "scripts": {
     "dev": "node --experimental-specifier-resolution=node --experimental-modules --no-warnings --loader ts-node/esm server.ts",
