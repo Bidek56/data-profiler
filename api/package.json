@@ -13,25 +13,25 @@
     "node": ">=20.8"
   },
   "dependencies": {
-    "@apollo/server": "^4.9.5",
-    "alasql": "^4.2.2",
-    "csv-parse": "^5.5.2",
-    "dotenv": "^16.3.1",
-    "graphql": "^16.8.1",
+    "@apollo/server": "^4.10.4",
+    "alasql": "^4.4.0",
+    "csv-parse": "^5.5.6",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
     "graphql-upload": "^16.0.2",
     "shortid": "^2.2.16",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/graphql-upload": "^16.0.5",
+    "@types/graphql-upload": "^16.0.7",
     "@types/shortid": "^0.0.32",
     "mkdirp": "^3.0.1",
-    "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.3.2",
-    "vitest": "^0.34.6"
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.2"
   },
   "scripts": {
     "dev": "node --experimental-specifier-resolution=node --experimental-modules --no-warnings --loader ts-node/esm server.ts",
