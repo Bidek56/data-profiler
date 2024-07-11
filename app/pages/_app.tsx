@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { createUploadLink } from 'apollo-upload-client'
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { setContext } from "apollo-link-context";
 
 const middlewareUpdate = createUploadLink({ uri: "http://localhost:3001/graphql" });
