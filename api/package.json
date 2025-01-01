@@ -13,28 +13,26 @@
     "node": ">=20.8"
   },
   "dependencies": {
-    "@apollo/server": "^4.10.4",
-    "alasql": "^4.4.0",
-    "csv-parse": "^5.5.6",
-    "dotenv": "^16.4.5",
-    "graphql": "^16.9.0",
+    "@apollo/server": "^4.11.2",
+    "alasql": "^4.6.1",
+    "csv-parse": "^5.6.0",
+    "dotenv": "^16.4.7",
+    "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
-    "graphql-upload": "^16.0.2",
+    "graphql-upload": "^17.0.0",
     "shortid": "^2.2.16",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/graphql-upload": "^16.0.7",
-    "@types/shortid": "^0.0.32",
+    "@types/graphql-upload": "^17.0.0",
+    "@types/shortid": "^2.2.0",
     "mkdirp": "^3.0.1",
-    "nodemon": "^3.1.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.3",
-    "vitest": "^2.0.2"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "scripts": {
-    "dev": "node --experimental-specifier-resolution=node --experimental-modules --no-warnings --loader ts-node/esm server.ts",
+    "dev": "bun run server.ts",
     "test": "vitest"
   }
 }
