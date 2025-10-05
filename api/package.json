@@ -17,7 +17,7 @@
     "@as-integrations/express5": "^1.1.2",
     "alasql": "^4.6.6",
     "csv-parse": "^6.1.0",
-    "dotenv": "^17.2.1",
+    "dotenv": "^17.2.3",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
     "graphql-upload": "^17.0.0",
@@ -29,7 +29,7 @@
     "@types/graphql-upload": "^17.0.0",
     "@types/shortid": "^2.2.0",
     "mkdirp": "^3.0.1",
-    "typescript": "^5.9.2",
+    "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   },
   "scripts": {
