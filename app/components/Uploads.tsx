@@ -1,6 +1,7 @@
 import Profile from './Profile'
 // import Correlate from './Correlate'
-import { useQuery, useLazyQuery, useMutation, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client/react";
 
 import { makeStyles } from '@mui/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';

@@ -1,4 +1,5 @@
-import { useMutation, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import React, {useCallback} from 'react'
 import {useDropzone, FileWithPath} from 'react-dropzone'
 import styled from 'styled-components';

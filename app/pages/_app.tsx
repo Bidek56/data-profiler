@@ -1,16 +1,17 @@
 import type { AppProps } from 'next/app'
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
-import { setContext } from "apollo-link-context";
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
+import { SetContextLink } from '@apollo/client/link/context';
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 
-const middlewareUpdate = createUploadLink({ uri: "http://localhost:3001/graphql" });
-const authLink = setContext((_, { headers }) => {
+const middlewareUpdate = new UploadHttpLink({ uri: "http://localhost:3001/graphql" });
+const authLink = new SetContextLink((prevContext, operation) => {
   // Leer el storage almacenado
   const token = localStorage.getItem("token");
   // console.log(token);
   return {
     headers: {
-      ...headers,
+      ...prevContext.headers,
       authorization: token ? `Bearer ${token}` : "",
       'Apollo-Require-Preflight': 'true'
     },
@@ -18,12 +19,8 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  connectToDevTools: true,
   cache: new InMemoryCache(),
   link: authLink.concat(middlewareUpdate),
-  fetchOptions: {
-    mode: "no-cors",
-  },
 })
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
